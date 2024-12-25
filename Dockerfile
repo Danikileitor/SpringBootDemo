@@ -3,6 +3,10 @@ FROM openjdk:21
 # Configura la variable de entorno para la aplicación
 ENV APP_NAME=demo
 
+# Genera la build
+RUN mvn clean package
+RUN ./mvnw spring-boot:build-image
+
 # Copia los archivos de tu proyecto a la imagen
 COPY target/demo.jar /app/
 
