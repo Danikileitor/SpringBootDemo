@@ -2,15 +2,21 @@ FROM openjdk:21 AS build
 
 # Configura la variable de entorno para la aplicación
 ENV APP_NAME=demo
+ENV HOME=/usr/app
+RUN mkdir -p $HOME
+WORKDIR $HOME
+ADD . $HOME
+RUN --mount=type=cache,target=/root/.m2 ./mvnw -f $HOME/pom.xml clean package
 
 # Genera la build
-RUN mvn clean package
-RUN ./mvnw spring-boot:build-image
+#RUN mvn clean package
+#RUN ./mvnw spring-boot:build-image
 
 FROM openjdk:21
 
 # Copia los archivos de tu proyecto a la imagen
-COPY target/demo.jar /app/
+ARG JAR_FILE=/usr/app/target/*.jar
+COPY --from=build $JAR_FILE /app/demo.jar
 
 # Configura la variable de entorno para MongoDB
 ENV MONGO_URI=mongodb://localhost:27017/
