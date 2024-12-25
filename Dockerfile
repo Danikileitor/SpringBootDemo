@@ -26,6 +26,9 @@ WORKDIR /app
 # Copiamos el archivo JAR generado desde la etapa anterior
 COPY --from=build /app/target/*.jar app.jar
 
+#Mondongo
+ENV MONGO_URI=mongodb://localhost:27017/
+
 # Exponemos el puerto en el que la app Spring Boot escucha (por defecto 8080)
 EXPOSE 8080
 
