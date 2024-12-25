@@ -73,6 +73,11 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<image>
+						<name>demo:latest</name>
+					</image>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
