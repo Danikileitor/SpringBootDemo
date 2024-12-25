@@ -21,7 +21,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: "21"
-          distribution: "adoptopenjdk"
+          distribution: "temurin"
 
       # Paso 3: Configurar Docker Buildx
       - name: Set up Docker Buildx
