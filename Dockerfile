@@ -2,10 +2,9 @@ FROM openjdk:21
 
 # Configura la variable de entorno para la aplicación
 ENV APP_NAME=demo
-WORKDIR /app
 
 # Copia los archivos de tu proyecto a la imagen
-COPY target/demo.jar /app/demo.jar
+COPY target/demo.jar /app/
 
 # Configura la variable de entorno para MongoDB
 ENV MONGO_URI=mongodb://localhost:27017/
