@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Tragaperras</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+    <h1>Tragaperras</h1>
+    <div class="slot-machine">
+        <div class="reel">
+            <span id="reel1">?</span>
+            <span id="reel2">?</span>
+            <span id="reel3">?</span>
+        </div>
+        <div class="buttons">
+            <button id="play-button">Jugar</button>
+            <button id="show-wins-button">Victorias</button>
+        </div>
+        <p id="message">?</p>
+    </div>
+    <script th:src="@{/js/script.js}"></script>
+</body>
+
+</html>
