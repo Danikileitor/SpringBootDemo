@@ -78,7 +78,7 @@
 						<name>demo:latest</name>
 						<env>
 							<BP_JVM_VERSION>21</BP_JVM_VERSION>
-							<BPE_APPEND_JAVA_TOOL_OPTIONS xml:space="preserve">-XX:MaxDirectMemorySize=512M</BPE_APPEND_JAVA_TOOL_OPTIONS>
+							<JAVA_TOOL_OPTIONS xml:space="preserve">-XX:MaxDirectMemorySize=512M</JAVA_TOOL_OPTIONS>
 						</env>
 					</image>
 				</configuration>
