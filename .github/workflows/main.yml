@@ -36,7 +36,9 @@ jobs:
 
       # Paso 5: Construir la imagen usando Spring Boot Build Image
       - name: Build Docker image with Spring Boot plugin
-        run: ./mvnw spring-boot:build-image -DskipTests
+        #run: ./mvnw spring-boot:build-image -DskipTests
+        run: |
+          docker build -t demo .
 
       # Paso 6: Etiquetar la imagen (si es necesario)
       - name: Tag Docker image
