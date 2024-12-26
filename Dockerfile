@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copiamos el archivo pom.xml y descargamos las dependencias
 COPY pom.xml .
-RUN mvn dependency:go-offline
+#RUN mvn dependency:go-offline
 
 # Copiamos el código fuente del proyecto
 COPY src ./src
