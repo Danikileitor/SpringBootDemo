@@ -10,9 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Controller
 public class SlotMachineController {
@@ -20,8 +22,17 @@ public class SlotMachineController {
     @Autowired
     private SlotMachineResultRepository repository;
 
-    private String getRandomReel() {
-        String[] reels = { "🍕", "🍔", "🍟", "🌭", "🍿" };
+    private String getRandomReel(String skin) {
+        String[] reels;
+        switch (skin) {
+            case "coches":
+                reels = new String[] { "🚗", "🚕", "🏎️", "🚒", "🚓" };
+                break;
+
+            default:// comidaBasura
+                reels = new String[] { "🍕", "🍔", "🍟", "🌭", "🍿" };
+                break;
+        }
         return reels[(int) (Math.random() * reels.length)];
     }
 
@@ -30,13 +41,13 @@ public class SlotMachineController {
         return "index";
     }
 
-    @PostMapping(value = "/play", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/play", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public SlotMachineResult play() {
+    public SlotMachineResult play(@RequestBody PlayRequest request) {
         // Simulate slot machine reels
-        String reel1 = getRandomReel();
-        String reel2 = getRandomReel();
-        String reel3 = getRandomReel();
+        String reel1 = getRandomReel(request.getSkin());
+        String reel2 = getRandomReel(request.getSkin());
+        String reel3 = getRandomReel(request.getSkin());
 
         // Check for winning combination
         String message;
@@ -50,6 +61,19 @@ public class SlotMachineController {
                 message, new Date());
         repository.save(result);
         return result;
+    }
+
+    public static class PlayRequest {
+        @JsonProperty("skin")
+        private String skin = "comidaBasura";
+
+        public String getSkin() {
+            return skin;
+        }
+
+        public void setSkin(String skin) {
+            this.skin = skin;
+        }
     }
 
     @PostMapping(value = "/wins", produces = MediaType.APPLICATION_JSON_VALUE)

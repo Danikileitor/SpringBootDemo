@@ -1,9 +1,11 @@
 document.getElementById('play-button').addEventListener('click', function () {
+    var data = { "skin": document.getElementById('skin').value };
     fetch('/play', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify(data)
     })
         .then(response => response.json())
         .then(data => {
