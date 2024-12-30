@@ -59,61 +59,62 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Authorization': 'Bearer ' + localStorage.getItem('token')
                 }
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('No se pudo cargar los usuarios');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Limpia la tabla
-                userTableBody.innerHTML = '';
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('No se pudo cargar los usuarios');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Limpia la tabla
+                    userTableBody.innerHTML = '';
 
-                data.forEach(user => {
-                    console.info(user);
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
+                    data.forEach(user => {
+                        console.info(user);
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
                     <td>${user.username}</td>
                     <td>${user.email}</td>
                     <td>
                     <select data-id="${user.id}" class="user-role">
-                    <option value="USER" ${user.rol === 'USER' ? 'selected' : ''}>USER</option>
-                    <option value="ADMIN" ${user.rol === 'ADMIN' ? 'selected' : ''}>ADMIN</option>
-                    <option value="VIP" ${user.rol === 'VIP' ? 'selected' : ''}>VIP</option>
+                    <option value="ROLE_USER" ${user.rol === 'ROLE_USER' ? 'selected' : ''}>USER</option>
+                    <option value="ROLE_ADMIN" ${user.rol === 'ROLE_ADMIN' ? 'selected' : ''}>ADMIN</option>
+                    <option value="ROLE_VIP" ${user.rol === 'ROLE_VIP' ? 'selected' : ''}>VIP</option>
                     </select>
                     </td>
                     <td>${user.skins.map(skin => skin).join(', ')}</td>
                     <td><button data-id="${user.id}" class="save-button">Guardar</button></td>
                     `;
-                    userTableBody.appendChild(row);
-                });
-            }).catch(error => {
-                console.error('Error:', error);
-            });
-
-            // Añadir eventos a los botones
-            document.querySelectorAll('.save-button').forEach(button => {
-                button.addEventListener('click', async (e) => {
-                    const id = e.target.dataset.id;
-                    const row = e.target.closest('tr');
-                    const roleSelect = row.querySelector('.user-role').value;
-
-                    const response = await fetch(`/admin/api/users/${id}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + localStorage.getItem('token')
-                        },
-                        body: JSON.stringify({ rol: roleSelect })
+                        userTableBody.appendChild(row);
                     });
 
-                    if (response.ok) {
-                        alert('Usuario actualizado');
-                    } else {
-                        alert('Error al actualizar el usuario');
-                    }
+                    // Añadir eventos a los botones
+                    userTableBody.addEventListener('click', async (e) => {
+                        if (e.target && e.target.classList.contains('save-button')) {
+                            const id = e.target.dataset.id;
+                            const row = e.target.closest('tr');
+                            const roleSelect = row.querySelector('.user-role').value;
+
+                            const response = await fetch(`/admin/api/users/${id}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                },
+                                body: JSON.stringify({ rol: roleSelect })
+                            });
+
+                            if (response.ok) {
+                                alert('Usuario actualizado');
+                                location.reload();
+                            } else {
+                                alert('Error al actualizar el usuario');
+                            }
+                        }
+                    });
+                }).catch(error => {
+                    console.error('Error:', error);
                 });
-            });
         };
 
         // Inicializa la tabla

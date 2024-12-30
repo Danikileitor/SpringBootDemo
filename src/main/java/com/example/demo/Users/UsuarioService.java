@@ -45,8 +45,12 @@ public class UsuarioService {
 
     public Usuario updateUser(String id, Usuario updatedUser) {
         Usuario user = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        user.setRol(updatedUser.getRol());
-        user.setSkins(updatedUser.getSkins());
+        if (!updatedUser.getRol().equals(null)) {
+            user.setRol(updatedUser.getRol());
+        }
+        if (updatedUser.getSkins() != null) {
+            user.setSkins(updatedUser.getSkins());
+        }        
         return usuarioRepository.save(user);
     }
 }
