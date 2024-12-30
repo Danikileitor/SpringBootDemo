@@ -27,6 +27,17 @@ table th {
   background-color: #f2f2f2;
 }
 
+.skins {
+  display: flex;
+  gap: 10px;
+}
+
+.edit-skins-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
 .save-button {
   padding: 8px 16px;
   background-color: #4caf50;
