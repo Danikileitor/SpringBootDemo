@@ -86,14 +86,6 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body("Acceso denegado. Solo los administradores pueden acceder.");
     }
-
-    @GetMapping("/whoami")
-    public ResponseEntity<?> whoami(Authentication authentication) {
-        if (authentication == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No estás autenticado");
-        }
-        return ResponseEntity.ok("Roles: " + authentication.getAuthorities());
-    }
 }
 
 class RegistroRequest {
