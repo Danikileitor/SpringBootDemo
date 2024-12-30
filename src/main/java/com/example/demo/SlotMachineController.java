@@ -52,6 +52,11 @@ public class SlotMachineController {
         return "index";
     }
 
+    @GetMapping("/admin")
+    public String admin() {
+        return "admin";
+    }
+
     @Autowired
     private UsuarioService usuarioService;
 

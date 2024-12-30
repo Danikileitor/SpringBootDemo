@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const response = await fetch('/api/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password, email, rol: 'USER' })
+            body: JSON.stringify({ username, password, email, rol: 'ROLE_USER' })
         });
 
         if (response.ok) {

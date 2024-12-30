@@ -1,10 +1,15 @@
 package com.example.demo.Users;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -33,7 +38,7 @@ public class AuthController {
                         registroRequest.getUsername(),
                         registroRequest.getPassword(),
                         registroRequest.getEmail(),
-                        Rol.USER);
+                        Rol.ROLE_USER);
                 return ResponseEntity.ok(usuario);
             } catch (Exception e) {
                 return ResponseEntity.badRequest().body(e.getMessage());
@@ -47,10 +52,47 @@ public class AuthController {
                 loginRequest.getUsername(),
                 loginRequest.getPassword());
         if (usuario.isPresent()) {
-            String token = JwtTokenUtil.generateToken(usuario.get().getUsername());
+            String token = JwtTokenUtil.generateToken(usuario.get());
+
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    usuario.get(), // Principal (Usuario autenticado)
+                    null, // Credenciales (pueden ser null después de autenticación)
+                    List.of(new SimpleGrantedAuthority(usuario.get().getRol().name())) // Roles/Authorities
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
             return ResponseEntity.ok(token); // Devuelve el token como texto plano
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario o contraseña incorrectos");
+    }
+
+    @PostMapping("/admin/login")
+    public ResponseEntity<?> adminLogin(@RequestBody LoginRequest loginRequest) {
+        Optional<Usuario> usuario = usuarioService.login(
+                loginRequest.getUsername(),
+                loginRequest.getPassword());
+        if (usuario.isPresent() && usuario.get().getRol() == Rol.ROLE_ADMIN) {
+            String token = JwtTokenUtil.generateToken(usuario.get());
+
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    usuario.get(), // Principal (Usuario autenticado)
+                    null, // Credenciales (pueden ser null después de autenticación)
+                    List.of(new SimpleGrantedAuthority(usuario.get().getRol().name())) // Roles/Authorities
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            return ResponseEntity.ok(token); // Devuelve el token como texto plano
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body("Acceso denegado. Solo los administradores pueden acceder.");
+    }
+
+    @GetMapping("/whoami")
+    public ResponseEntity<?> whoami(Authentication authentication) {
+        if (authentication == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No estás autenticado");
+        }
+        return ResponseEntity.ok("Roles: " + authentication.getAuthorities());
     }
 }
 

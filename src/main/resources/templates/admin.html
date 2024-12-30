@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Panel de Administración</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+
+<body>
+    <h1>Panel de Administración</h1>
+
+    <!-- Contenedor para el login -->
+    <div id="auth-section">
+        <h2 id="auth-section-title">Iniciar Sesión</h2>
+
+        <form id="loginForm" style="display: block;">
+            <input type="text" id="loginUsername" placeholder="Usuario" required>
+            <input type="password" id="loginPassword" placeholder="Contraseña" required>
+            <div class="buttons">
+                <button type="submit">Iniciar Sesión</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Contenedor para el panel de admin -->
+    <div id="admin-section" style="display: none;">
+        <table id="userTable">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Skins Desbloqueadas</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Filas generadas dinámicamente -->
+            </tbody>
+        </table>
+        <button id="logout-button">Cerrar Sesión</button>
+    </div>
+
+    <script th:src="@{/js/admin.js}"></script>
+</body>
+
+</html>

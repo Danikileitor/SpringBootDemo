@@ -1,5 +1,5 @@
 package com.example.demo.Users;
 
 public enum Rol {
-    USER, ADMIN, VIP;
+    ROLE_USER, ROLE_ADMIN, ROLE_VIP;
 }

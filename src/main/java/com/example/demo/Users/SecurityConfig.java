@@ -1,5 +1,6 @@
 package com.example.demo.Users;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -7,10 +8,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -25,15 +30,15 @@ public class SecurityConfig {
                 // Configuración de CSRF
                 .csrf(csrf -> csrf.disable()) // Deshabilitar CSRF
                 // Permitir todo básicamente
-                .authorizeHttpRequests((auth) -> auth.anyRequest().permitAll())
-                /*
-                 * // Autorización de rutas
-                 * .authorizeHttpRequests(auth -> auth
-                 * .requestMatchers("/api/auth/register", "/api/auth/login", "/").permitAll()
-                 * .anyRequest().authenticated())
-                 */
-                // Opcional: configuración adicional si es necesario
-                .formLogin(login -> login.disable()); // Deshabilita el login basado en formulario por defecto
+                .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/admin/api", "/admin/api/**", "/users", "/users/**")
+                        .hasAuthority("ROLE_ADMIN")
+                        .anyRequest().permitAll())
+                // Deshabilita el login basado en formulario por defecto
+                .formLogin(login -> login.disable());
+
+        // Añadir el filtro JWT
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
 

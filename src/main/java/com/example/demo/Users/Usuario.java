@@ -25,7 +25,7 @@ public class Usuario {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.rol = Rol.USER;
+        this.rol = Rol.ROLE_USER;
         this.skins = new HashSet<>();
         this.skins.add(Skin.COMIDA_BASURA);
     }

@@ -3,6 +3,8 @@ package com.example.demo.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,5 +37,16 @@ public class UsuarioService {
 
     public Optional<Usuario> findByUsername(String username) {
         return usuarioRepository.findByUsername(username);
+    }
+
+    public List<Usuario> getAllUsers() {
+        return usuarioRepository.findAll();
+    }
+
+    public Usuario updateUser(String id, Usuario updatedUser) {
+        Usuario user = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        user.setRol(updatedUser.getRol());
+        user.setSkins(updatedUser.getSkins());
+        return usuarioRepository.save(user);
     }
 }

@@ -7,8 +7,6 @@ import io.jsonwebtoken.security.Keys;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 public class JwtTokenUtil {
@@ -17,22 +15,34 @@ public class JwtTokenUtil {
     private static Long expiration = Long.parseLong(System.getenv().get("JWT_EXPIRATION"), 10);
 
     // Método para generar el token JWT
-    public static String generateToken(String username) {
-        Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
-    }
-
-    // Método auxiliar para crear el token con sus datos
-    private static String createToken(Map<String, Object> claims, String subject) {
+    public static String generateToken(Usuario usuario) {
         Key key = Keys.hmacShaKeyFor(secret.getBytes());
 
         return Jwts.builder()
-                .setClaims(claims) // Añadir claims si los hay
-                .setSubject(subject) // Añade el nombre de usuario
+                .setSubject(usuario.getUsername()) // Añade el nombre del usuario
+                .claim("role", usuario.getRol().name()) // Añade el rol del usuario
                 .setIssuedAt(new Date()) // Hora actual como "emitido"
                 .setExpiration(new Date(System.currentTimeMillis() + expiration)) // Tiempo de expiración
                 .signWith(key, SignatureAlgorithm.HS256) // Firma del token
-                .compact(); // Comprimir el token
+                .compact();
+    }
+
+    public static String getUsernameFromToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secret.getBytes())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
+
+    public static String getRoleFromToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secret.getBytes())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role", String.class);
     }
 
     /**
