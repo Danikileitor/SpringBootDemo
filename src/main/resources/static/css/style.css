@@ -1,101 +1,154 @@
 html {
-    height: 100%;
+  height: 100%;
 }
 
 body {
-    background-image: url('https://picsum.photos/1920/1080');
-    background-size: cover;
-    background-position: center;
-    font-family: Arial, sans-serif;
+  background-image: url("https://picsum.photos/1920/1080");
+  background-size: cover;
+  background-position: center;
+  font-family: Arial, sans-serif;
 }
 
 h1 {
-    text-align: center;
-    color: #fff;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    font-size: 48px;
-    margin-bottom: 20px;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  font-size: 48px;
+  margin-bottom: 20px;
 }
 
 .slot-machine {
-    width: 300px;
-    margin: 40px auto;
-    text-align: center;
-    background-color: #333;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  width: 300px;
+  margin: 40px auto;
+  text-align: center;
+  background-color: #333;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .reel {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    background-color: #444;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  background-color: #444;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .reel span {
-    font-size: 36px;
-    font-weight: bold;
-    margin: 0 10px;
-    color: #fff;
+  font-size: 36px;
+  font-weight: bold;
+  margin: 0 10px;
+  color: #fff;
 }
 
 .buttons {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
 }
 
 button {
-    padding: 10px 20px;
-    font-size: 18px;
-    cursor: pointer;
-    background-color: #4CAF50;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 button:hover {
-    background-color: #3e8e41;
+  background-color: #3e8e41;
 }
 
 button:active {
-    transform: translateY(2px);
+  transform: translateY(2px);
 }
 
 #message {
-    font-size: 24px;
-    color: #fff;
-    text-align: center;
-    margin-bottom: 20px;
+  font-size: 24px;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 select {
-    padding: 10px 20px;
-    font-size: 18px;
-    cursor: pointer;
-    background-color: #3498db;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-    text-align: center;
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  text-align: center;
 }
 
 select:hover {
-    background-color: #2e6da4;
+  background-color: #2e6da4;
 }
 
 select:active {
-    transform: translateY(2px);
+  transform: translateY(2px);
 }
 
 select option {
-    direction: rtl;
+  direction: rtl;
+}
+
+#auth-section {
+  width: 320px;
+  padding: 20px;
+  background-color: #333;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  margin: 0 auto;
+}
+
+#auth-section h2 {
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+#auth-section form {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+#auth-section button {
+  margin-top: 10px;
+}
+
+#auth-section input[type="text"],
+#auth-section input[type="password"],
+#auth-section input[type="email"] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #000000;
+  background-color: #222;
+  color: #fff;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+#auth-section input[type="text"]:focus,
+#auth-section input[type="password"]:focus,
+#auth-section input[type="email"]:focus {
+  border-color: #4caf50;
+  outline: none;
+}
+
+#logout-button {
+    display: block;
+    margin: 20px auto;
 }

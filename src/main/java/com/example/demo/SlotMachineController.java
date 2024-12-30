@@ -1,18 +1,29 @@
 package com.example.demo;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.demo.Users.JwtTokenUtil;
+import com.example.demo.Users.Usuario;
+import com.example.demo.Users.UsuarioService;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -25,11 +36,11 @@ public class SlotMachineController {
     private String getRandomReel(String skin) {
         String[] reels;
         switch (skin) {
-            case "coches":
+            case "Coches":
                 reels = new String[] { "🚗", "🚕", "🏎️", "🚒", "🚓" };
                 break;
 
-            default:// comidaBasura
+            default:// COMIDA_BASURA
                 reels = new String[] { "🍕", "🍔", "🍟", "🌭", "🍿" };
                 break;
         }
@@ -39,6 +50,34 @@ public class SlotMachineController {
     @GetMapping("/")
     public String index() {
         return "index";
+    }
+
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @PostMapping(value = "/skins/desbloqueadas", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<?> obtenerSkinsDesbloqueadas(@RequestHeader("Authorization") String token) {
+        Optional<String> usernameOpt = JwtTokenUtil.extractUsernameFromToken(token);
+
+        if (usernameOpt.isPresent()) {
+            Optional<Usuario> usuarioOpt = usuarioService.findByUsername(usernameOpt.get());
+            if (usuarioOpt.isPresent()) {
+                Set<Skin> skins = usuarioOpt.get().getSkins();
+                List<Map<String, String>> skinsData = skins.stream()
+                        .map(skin -> {
+                            Map<String, String> skinData = new HashMap<>();
+                            skinData.put("name", skin.getName());
+                            skinData.put("description", skin.getDescription());
+                            return skinData;
+                        }).collect(Collectors.toList());
+                return ResponseEntity.ok(skinsData);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido");
+        }
     }
 
     @PostMapping(value = "/play", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -65,7 +104,7 @@ public class SlotMachineController {
 
     public static class PlayRequest {
         @JsonProperty("skin")
-        private String skin = "comidaBasura";
+        private String skin = Skin.COMIDA_BASURA.getName();
 
         public String getSkin() {
             return skin;

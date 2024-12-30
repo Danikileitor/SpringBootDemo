@@ -8,24 +8,56 @@
 
 <body>
     <h1>Tragaperras</h1>
-    <div class="slot-machine">
-        <div class="reel">
-            <span id="reel1">?</span>
-            <span id="reel2">?</span>
-            <span id="reel3">?</span>
-        </div>
-        <div class="buttons">
-            <button id="play-button">Jugar</button>
-            <button id="show-wins-button">Victorias</button>
-        </div>
-        <p id="message">?</p>
-        <div>
-            <select id="skin">
-                <option value="comidaBasura" selected>Comida Basura</option>
-                <option value="coches">Coches</option>
-            </select>
-        </div>
+
+    <!-- Contenedor para el login/registro -->
+    <div id="auth-section">
+        <h2 id="auth-section-title">Iniciar Sesión</h2>
+
+        <form id="loginForm" style="display: block;">
+            <input type="text" id="loginUsername" placeholder="Usuario" required>
+            <input type="password" id="loginPassword" placeholder="Contraseña" required>
+            <div class="buttons">
+                <button type="submit">Iniciar Sesión</button>
+                <button id="showRegister" type="button">¿Registrarse?</button>
+            </div>
+        </form>
+
+        <form id="registerForm" style="display: none;">
+            <input type="text" id="registerUsername" placeholder="Usuario" required>
+            <input type="password" id="registerPassword" placeholder="Contraseña" required>
+            <input type="email" id="registerEmail" placeholder="Correo electrónico" required>
+            <div class="buttons">
+                <button type="submit">Registrarse</button>
+                <button id="showLogin" type="button">¿Iniciar Sesión?</button>
+            </div>
+        </form>
     </div>
+
+    <!-- Contenedor del juego, inicialmente oculto -->
+    <div id="game-section" style="display: none;">
+        <div class="slot-machine">
+            <div class="reel">
+                <span id="reel1">?</span>
+                <span id="reel2">?</span>
+                <span id="reel3">?</span>
+            </div>
+            <div class="buttons">
+                <button id="play-button">Jugar</button>
+                <button id="show-wins-button">Victorias</button>
+            </div>
+            <p id="message">?</p>
+            <div>
+                <select id="skin">
+                    <!--
+                    <option value="comidaBasura" selected>Comida Basura</option>
+                    <option value="coches">Coches</option>
+                    -->
+                </select>
+            </div>
+        </div>
+        <button id="logout-button">Cerrar Sesión</button>
+    </div>
+
     <script th:src="@{/js/script.js}"></script>
 </body>
 
