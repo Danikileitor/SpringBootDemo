@@ -132,7 +132,8 @@ document.getElementById('play-button').addEventListener('click', function () {
     fetch('/play', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
         },
         body: JSON.stringify(data)
     })
@@ -150,7 +151,8 @@ document.getElementById('show-wins-button').addEventListener('click', function (
     fetch('/wins', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
     })
         .then(response => response.json())
