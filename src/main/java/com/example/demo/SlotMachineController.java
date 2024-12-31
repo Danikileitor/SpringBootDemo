@@ -30,16 +30,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class SlotMachineController {
 
     private String getRandomReel(String skin) {
-        String[] reels;
-        switch (skin) {
-            case "Coches":
-                reels = new String[] { "🚗", "🚕", "🏎️", "🚒", "🚓" };
-                break;
-
-            default:// COMIDA_BASURA
-                reels = new String[] { "🍕", "🍔", "🍟", "🌭", "🍿" };
-                break;
-        }
+        String[] reels = Skin.fromString(skin).getReels();
         return reels[(int) (Math.random() * reels.length)];
     }
 

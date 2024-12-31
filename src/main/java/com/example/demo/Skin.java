@@ -1,16 +1,19 @@
 package com.example.demo;
 
 public enum Skin {
-    COMIDA_BASURA("Comida Basura", "Skin de comida basura"),
-    COCHES("Coches", "Skin de coches");
+    COMIDA_BASURA("Comida Basura", "Skin de comida basura", new String[] { "🍕", "🍔", "🍟", "🌭", "🍿" }),
+    COCHES("Coches", "Skin de coches", new String[] { "🚗", "🚕", "🏎️", "🚒", "🚓" }),
+    CARAS("Caras", "Skin de caras", new String[] { "😎", "🤔", "🤣", "😘", "🤠" });
 
     private final String name;
     private final String description;
+    private final String[] reels;
 
     // Constructor para asociar un nombre y una descripción a cada skin
-    Skin(String name, String description) {
+    Skin(String name, String description, String[] reels) {
         this.name = name;
         this.description = description;
+        this.reels = reels;
     }
 
     // Getters para obtener el nombre y descripción
@@ -20,6 +23,10 @@ public enum Skin {
 
     public String getDescription() {
         return description;
+    }
+
+    public String[] getReels() {
+        return reels;
     }
 
     // Si quieres obtener el nombre de la skin como una cadena

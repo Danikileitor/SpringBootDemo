@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>
                         <div class="skins">
                             <button data-id="${user.id}" class="edit-skins-button">✏️</button>
-                            <div class="user-skins">${user.skins.map(skin => skin).join(', ')}</div>
+                            <div class="user-skins">${user.skins.toReversed().map(skin => skin).join(', ')}</div>
                             <div data-id="${user.id}" class="skins-checkboxes-container" style="display: none;">
                                 <!-- Se llenará con las skins -->
                             </div>

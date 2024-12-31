@@ -45,6 +45,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Para cambiar el title del select igual a su option
+    skinSelect.addEventListener('change', () =>{
+        skinSelect.title = skinSelect.options[skinSelect.selectedIndex].title;
+        localStorage.setItem("lastSkin", skinSelect.options[skinSelect.selectedIndex].value);
+    });
+
     // Alternar entre login y registro
     showLoginButton.addEventListener('click', () => {
         authSectionTitle.innerText = 'Iniciar Sesión';
@@ -105,13 +111,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 skinSelect.innerHTML = '';
 
                 // Agrega las skins desbloqueadas como opciones
-                data.forEach(skin => {
+                data.reverse().forEach(skin => {
                     const option = document.createElement('option');
                     option.value = skin.name;
                     option.textContent = skin.name;
-                    option.setAttribute('Description', skin.description);
+                    option.title = skin.description;
+                    option.selected = skin.name == localStorage.getItem("lastSkin") ? true : false;
                     skinSelect.appendChild(option);
                 });
+
+                // Actualizamos el title del select
+                skinSelect.title = skinSelect.options[skinSelect.selectedIndex].title;
             })
             .catch(error => {
                 console.error('Error:', error);
