@@ -158,7 +158,7 @@ function loadCoins() {
 
 // Función para actualizar las monedas del usuario
 function updateCoins(delta) {
-    var data = JSON.stringify({ delta });
+    var data = { "delta": delta };
     fetch("/coins", {
         method: 'PUT',
         headers: {
@@ -170,7 +170,7 @@ function updateCoins(delta) {
         .then(response => response.json())
         .then(data => {
             loadCoins();
-            console.log("Monedas actualizadas");
+            console.log("Monedas actualizadas: " + data);
         })
         .catch(error => console.error('Error:', error));
 };
@@ -192,6 +192,9 @@ document.getElementById('play-button').addEventListener('click', function () {
             document.getElementById('reel2').textContent = data.reel2;
             document.getElementById('reel3').textContent = data.reel3;
             document.getElementById('message').textContent = data.message;
+            if (data.message == "¡Ganaste!") {
+                updateCoins(50);
+            }
         })
         .catch(error => console.error('Error:', error));
 });

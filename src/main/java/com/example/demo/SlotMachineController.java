@@ -179,7 +179,8 @@ public class SlotMachineController {
         }
     }
 
-    public class CoinUpdateRequest {
+    public static class CoinUpdateRequest {
+        @JsonProperty("delta")
         private int delta;
 
         public int getDelta() {
