@@ -50,7 +50,10 @@ public class UsuarioService {
         }
         if (updatedUser.getSkins() != null) {
             user.setSkins(updatedUser.getSkins());
-        }        
+        }
+        if (updatedUser.getCoins() >= 0) {
+            user.setCoins(updatedUser.getCoins());
+        }
         return usuarioRepository.save(user);
     }
 }

@@ -16,6 +16,7 @@ public class Usuario {
     private String password; // Encriptada
     private String email;
     private Rol rol;
+    private int coins;
     private Set<Skin> skins;
 
     public Usuario() {
@@ -26,6 +27,7 @@ public class Usuario {
         this.password = password;
         this.email = email;
         this.rol = Rol.ROLE_USER;
+        this.coins = 0;
         this.skins = new HashSet<>();
         this.skins.add(Skin.COMIDA_BASURA);
     }
@@ -74,6 +76,14 @@ public class Usuario {
 
     public void setRol(Rol rol) {
         this.rol = rol;
+    }
+
+    public int getCoins() {
+        return coins;
+    }
+
+    public void setCoins(int coins) {
+        this.coins = coins;
     }
 
     public Set<Skin> getSkins() {

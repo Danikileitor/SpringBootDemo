@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -50,6 +51,46 @@ public class SlotMachineController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @PostMapping(value = "/coins", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Integer> getCoins(@RequestHeader("Authorization") String token) {
+        Optional<String> usernameOpt = JwtTokenUtil.extractUsernameFromToken(token);
+        if (usernameOpt.isPresent()) {
+            Optional<Usuario> usuarioOpt = usuarioService.findByUsername(usernameOpt.get());
+            if (usuarioOpt.isPresent()) {
+                return ResponseEntity.ok(usuarioOpt.get().getCoins());
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    @PutMapping("/coins")
+    @ResponseBody
+    public ResponseEntity<Integer> updateCoins(@RequestHeader("Authorization") String token,
+            @RequestBody CoinUpdateRequest request) {
+        Optional<String> usernameOpt = JwtTokenUtil.extractUsernameFromToken(token);
+        if (usernameOpt.isPresent()) {
+            Optional<Usuario> usuarioOpt = usuarioService.findByUsername(usernameOpt.get());
+            if (usuarioOpt.isPresent()) {
+                int newCoins = usuarioOpt.get().getCoins() + request.getDelta();
+                if (newCoins >= 0) {
+                    usuarioOpt.get().setCoins(newCoins);
+                    usuarioService.updateUser(usuarioOpt.get().getId(), usuarioOpt.get());
+                    return ResponseEntity.ok(newCoins);
+                } else {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
     @PostMapping(value = "/skins/desbloqueadas", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> obtenerSkinsDesbloqueadas(@RequestHeader("Authorization") String token) {
@@ -80,31 +121,54 @@ public class SlotMachineController {
     public ResponseEntity<?> play(@RequestHeader("Authorization") String token, @RequestBody PlayRequest request) {
         Optional<String> usernameOpt = JwtTokenUtil.extractUsernameFromToken(token);
 
-        if (usernameOpt.isEmpty()) {
+        if (usernameOpt.isPresent()) {
+            Optional<Usuario> usuarioOpt = usuarioService.findByUsername(usernameOpt.get());
+            if (usuarioOpt.isPresent()) {
+                if (usuarioOpt.get().getCoins() >= 1) {
+                    String username = usernameOpt.get();
+                    String reel1 = getRandomReel(request.getSkin());
+                    String reel2 = getRandomReel(request.getSkin());
+                    String reel3 = getRandomReel(request.getSkin());
+                    int cost = request.getCost();
+                    String message = reel1.equals(reel2) && reel2.equals(reel3) ? "¡Ganaste!" : "¡Sigue intentando!";
+                    int attemptNumber = dynamicSlotMachineService.getNextAttemptNumber(username);
+
+                    int newCoins = usuarioOpt.get().getCoins() - cost;
+                    if (newCoins < 0) {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+                    }
+                    usuarioOpt.get().setCoins(newCoins);
+                    usuarioService.updateUser(usuarioOpt.get().getId(), usuarioOpt.get());
+
+                    SlotMachineResult result = new SlotMachineResult(username, attemptNumber, cost, reel1, reel2, reel3,
+                            message, new Date());
+                    dynamicSlotMachineService.saveResult(username, result);
+
+                    return ResponseEntity.ok(result);
+                } else {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No tienes sufiences monedas");
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+            }
+        } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido");
         }
-
-        String username = usernameOpt.get();
-        String collectionName = username; // Usamos el nombre del usuario como colección
-
-        // Simulate slot machine reels
-        String reel1 = getRandomReel(request.getSkin());
-        String reel2 = getRandomReel(request.getSkin());
-        String reel3 = getRandomReel(request.getSkin());
-
-        String message = reel1.equals(reel2) && reel2.equals(reel3) ? "¡Ganaste!" : "¡Sigue intentando!";
-        int attemptNumber = dynamicSlotMachineService.getNextAttemptNumber(collectionName);
-
-        SlotMachineResult result = new SlotMachineResult(username, attemptNumber, reel1, reel2, reel3, message,
-                new Date());
-        dynamicSlotMachineService.saveResult(collectionName, result);
-
-        return ResponseEntity.ok(result);
     }
 
     public static class PlayRequest {
         @JsonProperty("skin")
         private String skin = Skin.COMIDA_BASURA.getName();
+        @JsonProperty("cost")
+        private int cost;
+
+        public int getCost() {
+            return cost;
+        }
+
+        public void setCost(int cost) {
+            this.cost = cost;
+        }
 
         public String getSkin() {
             return skin;
@@ -112,6 +176,18 @@ public class SlotMachineController {
 
         public void setSkin(String skin) {
             this.skin = skin;
+        }
+    }
+
+    public class CoinUpdateRequest {
+        private int delta;
+
+        public int getDelta() {
+            return delta;
+        }
+
+        public void setDelta(int delta) {
+            this.delta = delta;
         }
     }
 
@@ -143,6 +219,7 @@ public class SlotMachineController {
         private String id;
         private String username;
         private int attemptNumber;
+        private int cost;
         private String reel1;
         private String reel2;
         private String reel3;
@@ -152,9 +229,8 @@ public class SlotMachineController {
         public SlotMachineResult() {
         }
 
-        public SlotMachineResult(String username, int attemptNumber, String reel1, String reel2, String reel3,
-                String message,
-                Date executionDate) {
+        public SlotMachineResult(String username, int attemptNumber, int cost, String reel1, String reel2, String reel3,
+                String message, Date executionDate) {
             this.username = username;
             this.attemptNumber = attemptNumber;
             this.reel1 = reel1;
@@ -170,6 +246,14 @@ public class SlotMachineController {
 
         public void setUsername(String username) {
             this.username = username;
+        }
+
+        public int getCost() {
+            return cost;
+        }
+
+        public void setCost(int cost) {
+            this.cost = cost;
         }
 
         public String getReel1() {

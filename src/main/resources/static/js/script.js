@@ -38,15 +38,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (response.ok) {
             const token = await response.text(); // Podrías guardar un JWT si usas uno
             localStorage.setItem('token', token);
-            toggleSections();
+            loadCoins();
             cargarSkins();
+            toggleSections();
         } else {
             alert('Usuario o contraseña incorrectos');
         }
     });
 
     // Para cambiar el title del select igual a su option
-    skinSelect.addEventListener('change', () =>{
+    skinSelect.addEventListener('change', () => {
         skinSelect.title = skinSelect.options[skinSelect.selectedIndex].title;
         localStorage.setItem("lastSkin", skinSelect.options[skinSelect.selectedIndex].value);
     });
@@ -130,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Comprueba si hay token almacenado
     if (token) {
+        loadCoins();
         cargarSkins();
     }
 
@@ -137,8 +139,44 @@ document.addEventListener('DOMContentLoaded', () => {
     toggleSections();
 });
 
+// Función para cargar las monedas del usuario
+function loadCoins() {
+    const coinsAmount = document.getElementById('coins-amount');
+    fetch('/coins', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            coinsAmount.textContent = data + "🪙";
+        })
+        .catch(error => console.error('Error:', error));
+};
+
+// Función para actualizar las monedas del usuario
+function updateCoins(delta) {
+    var data = JSON.stringify({ delta });
+    fetch("/coins", {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => response.json())
+        .then(data => {
+            loadCoins();
+            console.log("Monedas actualizadas");
+        })
+        .catch(error => console.error('Error:', error));
+};
+
 document.getElementById('play-button').addEventListener('click', function () {
-    var data = { "skin": document.getElementById('skin').value };
+    var data = { "skin": document.getElementById('skin').value, "cost": 1 };
     fetch('/play', {
         method: 'POST',
         headers: {
@@ -149,6 +187,7 @@ document.getElementById('play-button').addEventListener('click', function () {
     })
         .then(response => response.json())
         .then(data => {
+            loadCoins();
             document.getElementById('reel1').textContent = data.reel1;
             document.getElementById('reel2').textContent = data.reel2;
             document.getElementById('reel3').textContent = data.reel3;

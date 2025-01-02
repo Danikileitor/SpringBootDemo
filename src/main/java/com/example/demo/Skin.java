@@ -8,12 +8,12 @@ public enum Skin {
     NAVIDAD("Navidad", "Skin de Navidad", new String[] { "🎅", "🎄", "❄️", "⛄", "🎁" });
 
     private final String name;
-    private final Integer precio;
+    private final int precio;
     private final String description;
     private final String[] reels;
 
     // Constructor para asociar un nombre y una descripción a cada skin
-    Skin(String name, Integer precio, String description, String[] reels) {
+    Skin(String name, int precio, String description, String[] reels) {
         this.name = name;
         this.precio = precio;
         this.description = description;
@@ -29,7 +29,7 @@ public enum Skin {
         return name;
     }
 
-    public Integer getPrecio() {
+    public int getPrecio() {
         return precio;
     }
 

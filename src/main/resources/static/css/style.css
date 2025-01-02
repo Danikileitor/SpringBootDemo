@@ -149,6 +149,24 @@ select option {
 }
 
 #logout-button {
-    display: block;
-    margin: 20px auto;
+  display: block;
+  margin: 20px auto;
+}
+
+.coins-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #333;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.coins-amount {
+  margin: 0;
+  padding: 0;
 }
