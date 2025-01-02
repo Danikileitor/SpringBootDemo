@@ -2,25 +2,35 @@ package com.example.demo;
 
 public enum Skin {
     COMIDA_BASURA("Comida Basura", "Skin de comida basura", new String[] { "🍕", "🍔", "🍟", "🌭", "🍿" }),
-    COCHES("Coches", "Skin de coches", new String[] { "🚗", "🚕", "🏎️", "🚒", "🚓" }),
-    CARAS("Caras", "Skin de caras", new String[] { "😎", "🤔", "🤣", "😘", "🤠" }),
-    FRUTAS("Frutas", "Skin de frutas", new String[] { "🍎", "🍐", "🍌", "🍉", "🍍" }),
+    COCHES("Coches", 500, "Skin de coches", new String[] { "🚗", "🚕", "🏎️", "🚒", "🚓" }),
+    CARAS("Caras", 50, "Skin de caras", new String[] { "😎", "🤔", "🤣", "😘", "🤠" }),
+    FRUTAS("Frutas", 500, "Skin de frutas", new String[] { "🍎", "🍐", "🍌", "🍉", "🍍" }),
     NAVIDAD("Navidad", "Skin de Navidad", new String[] { "🎅", "🎄", "❄️", "⛄", "🎁" });
 
     private final String name;
+    private final Integer precio;
     private final String description;
     private final String[] reels;
 
     // Constructor para asociar un nombre y una descripción a cada skin
-    Skin(String name, String description, String[] reels) {
+    Skin(String name, Integer precio, String description, String[] reels) {
         this.name = name;
+        this.precio = precio;
         this.description = description;
         this.reels = reels;
+    }
+
+    Skin(String name, String description, String[] reels) {
+        this(name, 0, description, reels);
     }
 
     // Getters para obtener el nombre y descripción
     public String getName() {
         return name;
+    }
+
+    public Integer getPrecio() {
+        return precio;
     }
 
     public String getDescription() {
