@@ -55,6 +55,11 @@ public class UsuarioService {
         if (updatedUser.getCoins() >= 0) {
             user.setCoins(updatedUser.getCoins());
         }
+        return usuarioRepository.save(user);
+    }
+
+    public Usuario updateUserLoginDate(String id) {
+        Usuario user = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         user.setLastLoginDate(new Date());
         return usuarioRepository.save(user);
     }
