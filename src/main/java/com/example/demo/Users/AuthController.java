@@ -61,6 +61,12 @@ public class AuthController {
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
+            //Si es su primer login del día damos una recompensa
+            if (usuario.get().isFirstLoginOfDay()) {
+                usuario.get().setCoins(usuario.get().getCoins() + 20);
+                usuarioService.updateUser(usuario.get().getId(), usuario.get());
+            }
+
             return ResponseEntity.ok(token); // Devuelve el token como texto plano
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario o contraseña incorrectos");

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,6 +55,7 @@ public class UsuarioService {
         if (updatedUser.getCoins() >= 0) {
             user.setCoins(updatedUser.getCoins());
         }
+        user.setLastLoginDate(new Date());
         return usuarioRepository.save(user);
     }
 }

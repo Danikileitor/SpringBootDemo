@@ -1,5 +1,7 @@
 package com.example.demo.Users;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,6 +20,7 @@ public class Usuario {
     private Rol rol;
     private int coins;
     private Set<Skin> skins;
+    private Date lastLoginDate;
 
     public Usuario() {
     }
@@ -30,6 +33,7 @@ public class Usuario {
         this.coins = 0;
         this.skins = new HashSet<>();
         this.skins.add(Skin.COMIDA_BASURA);
+        this.lastLoginDate = null;
     }
 
     public Usuario(String username, String password, String email, Rol rol, Set<Skin> skins) {
@@ -94,9 +98,27 @@ public class Usuario {
         this.skins = skins;
     }
 
+    public Date getLastLoginDate() {
+        return lastLoginDate;
+    }
+
+    public void setLastLoginDate(Date lastLoginDate) {
+        this.lastLoginDate = lastLoginDate;
+    }
+
     public void desbloquearSkin(Skin skin) {
         if (skins != null) {
             skins.add(skin);
         }
+    }
+
+    public boolean isFirstLoginOfDay() {
+        Calendar today = Calendar.getInstance();
+        Calendar lastLogin = Calendar.getInstance();
+        today.setTime(new Date());
+        lastLogin.setTime(lastLoginDate);
+
+        return lastLogin.get(Calendar.DAY_OF_YEAR) != today.get(Calendar.DAY_OF_YEAR)
+                || lastLogin.get(Calendar.YEAR) != today.get(Calendar.YEAR);
     }
 }
