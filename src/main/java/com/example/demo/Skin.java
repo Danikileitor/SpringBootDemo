@@ -3,7 +3,9 @@ package com.example.demo;
 public enum Skin {
     COMIDA_BASURA("Comida Basura", "Skin de comida basura", new String[] { "🍕", "🍔", "🍟", "🌭", "🍿" }),
     COCHES("Coches", "Skin de coches", new String[] { "🚗", "🚕", "🏎️", "🚒", "🚓" }),
-    CARAS("Caras", "Skin de caras", new String[] { "😎", "🤔", "🤣", "😘", "🤠" });
+    CARAS("Caras", "Skin de caras", new String[] { "😎", "🤔", "🤣", "😘", "🤠" }),
+    FRUTAS("Frutas", "Skin de frutas", new String[] { "🍎", "🍐", "🍌", "🍉", "🍍" }),
+    NAVIDAD("Navidad", "Skin de Navidad", new String[] { "🎅", "🎄", "❄️", "⛄", "🎁" });
 
     private final String name;
     private final String description;
