@@ -185,7 +185,7 @@ document.getElementById('play-button').addEventListener('click', function () {
         },
         body: JSON.stringify(data)
     })
-        .then(response => response.json())
+        .then(response => { return response.ok ? response.json() : Promise.reject(response) })
         .then(data => {
             loadCoins();
             document.getElementById('reel1').textContent = data.reel1;
@@ -196,7 +196,7 @@ document.getElementById('play-button').addEventListener('click', function () {
                 updateCoins(50);
             }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => error.text().then(message => { console.error(message) }));
 });
 
 document.getElementById('show-wins-button').addEventListener('click', function () {

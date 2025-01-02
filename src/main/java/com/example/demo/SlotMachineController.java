@@ -135,7 +135,7 @@ public class SlotMachineController {
 
                     int newCoins = usuarioOpt.get().getCoins() - cost;
                     if (newCoins < 0) {
-                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No tienes sufiences monedas");
                     }
                     usuarioOpt.get().setCoins(newCoins);
                     usuarioService.updateUser(usuarioOpt.get().getId(), usuarioOpt.get());
@@ -146,7 +146,7 @@ public class SlotMachineController {
 
                     return ResponseEntity.ok(result);
                 } else {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No tienes sufiences monedas");
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No tienes suficientes monedas");
                 }
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
