@@ -51,6 +51,7 @@ jobs:
           docker push danikileitor/demo:latest
 
   Deploy-Render:
+    needs: Build
     runs-on: ubuntu-latest
 
     steps:
