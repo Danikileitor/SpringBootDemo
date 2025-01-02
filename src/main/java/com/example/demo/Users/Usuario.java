@@ -33,7 +33,7 @@ public class Usuario {
         this.coins = 0;
         this.skins = new HashSet<>();
         this.skins.add(Skin.COMIDA_BASURA);
-        this.lastLoginDate = null;
+        this.lastLoginDate = new Date(0);
     }
 
     public Usuario(String username, String password, String email, Rol rol, Set<Skin> skins) {

@@ -80,6 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (response.ok) {
             alert('Usuario registrado exitosamente');
+            authSectionTitle.innerText = 'Iniciar Sesión';
+            loginForm.style.display = 'block';
+            registerForm.style.display = 'none';
         } else {
             const error = await response.text();
             alert(`Error: ${error}`);
