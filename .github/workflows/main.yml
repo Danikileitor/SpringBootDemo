@@ -8,7 +8,7 @@ on:
     types: [published]
 
 jobs:
-  build:
+  Build:
     runs-on: ubuntu-latest
 
     steps:
@@ -50,14 +50,18 @@ jobs:
         run: |
           docker push danikileitor/demo:latest
 
-      # Paso 8: Instalar Render CLI
+  Deploy-Render:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Paso 1: Instalar Render CLI
       - name: Install Render CLI
         run: |
           curl -L https://github.com/render-oss/cli/releases/download/v1.1.0/cli_1.1.0_linux_amd64.zip -o render.zip
           unzip render.zip
           sudo mv cli_v1.1.0 /usr/local/bin/render
 
-      # Paso 9: Lanzar Deploy con Render CLI
+      # Paso 2: Lanzar Deploy con Render CLI
       - name: Trigger deploy with Render CLI
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
