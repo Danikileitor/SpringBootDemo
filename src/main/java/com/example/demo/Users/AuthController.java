@@ -64,6 +64,7 @@ public class AuthController {
             //Si es su primer login del día damos una recompensa
             if (usuario.get().isFirstLoginOfDay()) {
                 usuario.get().setCoins(usuario.get().getCoins() + 20);
+                usuarioService.updateUser(usuario.get().getId(), usuario.get());
             }
             usuarioService.updateUserLoginDate(usuario.get().getId());
 
