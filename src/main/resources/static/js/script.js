@@ -215,6 +215,7 @@ document.getElementById('play-button').addEventListener('click', function () {
                     if (resultado.message == "¡Ganaste!") {
                         updateCoins(50);
                     }
+                    loadRanking();
                 }, 2000);
             });
         })
@@ -246,7 +247,7 @@ function loadRanking() {
     })
         .then(response => response.json())
         .then(data => {
-            let rankingHtml = "<h3>RANKING</h3><table><tr><th>Usuario</th><th>Victorias</th></tr>";
+            let rankingHtml = "<h3>RANKING</h3><hr><table>";
             data.usuarios.forEach((usuario, i) => {
                 rankingHtml += `<tr><td>${usuario.username}</td><td>${data.victorias[i]}</td></tr>`;
             });

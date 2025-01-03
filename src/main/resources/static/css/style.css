@@ -151,6 +151,7 @@ select option {
 #logout-button {
   display: block;
   margin: 20px auto;
+  background-color: rgb(186, 32, 32);
 }
 
 .coins-container {
@@ -189,15 +190,107 @@ select option {
   letter-spacing: 2px;
 }
 
+#ranking-panel hr {
+  transform: translateY(-10.5px);
+  width: 90%;
+}
+
 #ranking-panel table {
   margin: 0 auto;
+  border-collapse: collapse;
 }
 
-#ranking-panel table th,
 #ranking-panel table td~td {
   text-align: center;
+  padding-left: 2em;
 }
 
-#ranking-panel table th {
-  padding-bottom: 10px;
+@media screen and (orientation: portrait) {
+
+  h1 {
+    font-size: 500%;
+  }
+
+  .slot-machine,
+  #ranking-panel {
+    width: 80%;
+    margin: 20px auto;
+  }
+
+  .reel {
+    height: 5vh;
+  }
+
+  .reel span {
+    width: 100%;
+    height: 100%;
+    font-size: 500%;
+  }
+
+  .slot-machine .buttons {
+    gap: 1em;
+    height: 5vh;
+  }
+
+  .slot-machine .buttons button {
+    font-size: 300%;
+  }
+
+  .slot-machine .buttons button:first-child {
+    width: 70%;
+  }
+
+  .slot-machine .buttons button:last-child {
+    width: 30%;
+  }
+
+  #skin {
+    width: 100%;
+    height: 5vh;
+    font-size: 300%;
+  }
+
+  #ranking-panel {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    padding-bottom: 2vh;
+  }
+
+  #ranking-panel h3,
+  #ranking-panel table td,
+  #message {
+    font-size: 300%;
+  }
+
+  #ranking-panel table {
+    width: 100%;
+  }
+
+  #logout-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    margin: 0 auto;
+    font-size: 24px
+  }
+
+  #ranking-panel table td:first-child {
+    padding-left: 10%;
+  }
+
+  #coins-amount {
+    font-size: 200%;
+    padding: 1vw;
+  }
+
+  #message {
+    margin-top: 20px;
+  }
+
+  #ranking-panel hr {
+    transform: translateY(-27px);
+    width: 90%;
+  }
 }
