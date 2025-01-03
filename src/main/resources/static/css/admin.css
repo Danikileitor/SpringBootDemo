@@ -27,15 +27,22 @@ table th {
   background-color: #f2f2f2;
 }
 
-.skins {
+.skins,
+.coins,
+.acciones {
   display: flex;
   gap: 10px;
 }
 
-.edit-skins-button {
+.edit-skins-button,
+.edit-coins-button {
   background: none;
   border: none;
   cursor: pointer;
+}
+
+.coins-input {
+  width: 5em;
 }
 
 .save-button {
@@ -47,6 +54,19 @@ table th {
   border-radius: 4px;
 }
 
+.delete-button {
+  padding: 8px 16px;
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
 .save-button:hover {
   background-color: #45a049;
+}
+
+.delete-button:hover {
+  background-color: #af3030;
 }

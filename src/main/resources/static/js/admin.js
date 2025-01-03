@@ -95,6 +95,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         </select>
                     </td>
                     <td>
+                        <div class="coins">
+                            <button data-id="${user.id}" class="edit-coins-button">✏️</button>
+                            <span>${user.coins}</span>
+                            <input type="number" class="coins-input" value="${user.coins}" style="display: none;">
+                        </div>
+                    </td>
+                    <td>
                         <div class="skins">
                             <button data-id="${user.id}" class="edit-skins-button">✏️</button>
                             <div class="user-skins">${user.skins.toReversed().map(skin => skin).join(', ')}</div>
@@ -103,17 +110,41 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                         </div>
                     </td>
-                    <td><button data-id="${user.id}" class="save-button">Guardar</button></td>
+                    <td>
+                        <div class="acciones">
+                            <button data-id="${user.id}" class="save-button">Guardar</button>
+                            <button data-id="${user.id}" class="delete-button">Eliminar</button>
+                        </div>
+                    </td>
                     `;
                         userTableBody.appendChild(row);
                     });
 
-                    // Delegado de eventos para los botones de "Editar Skins"
+                    // Delegado de eventos para los botones de "Editar ✏️"
                     userTableBody.addEventListener('click', async (e) => {
+                        // Editar monedas
+                        if (e.target && e.target.classList.contains('edit-coins-button')) {
+                            const row = e.target.closest('tr');
+                            const user = JSON.parse(row.dataset.user);
+                            const coinsSpan = row.querySelector('span');
+                            const coinsInput = row.querySelector('.coins-input');
+
+                            if (coinsInput.style.display === 'none') {
+                                coinsSpan.style.display = 'none';
+                                coinsInput.style.display = 'block';
+                            } else {
+                                coinsInput.style.display = 'none';
+                                coinsSpan.style.display = 'block';
+                            }
+
+                            if (coinsInput.style.display === 'block') {
+                                coinsInput.value = user.coins;
+                            }
+                        }
                         // Editar Skins (Mostrar checkboxes)
                         if (e.target && e.target.classList.contains('edit-skins-button')) {
                             const row = e.target.closest('tr');
-                            const user = JSON.parse(row.dataset.user);  // Recuperamos el usuario desde la fila
+                            const user = JSON.parse(row.dataset.user);
                             const userSkins = e.target.closest('td').querySelector('.user-skins');
                             const checkboxesContainer = row.querySelector('.skins-checkboxes-container');
 
@@ -159,11 +190,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             }
                         }
 
-                        // Guardar los cambios (rol y skins)
+                        // Guardar los cambios (rol, monedas y skins)
                         if (e.target && e.target.classList.contains('save-button')) {
                             const id = e.target.dataset.id;
                             const row = e.target.closest('tr');
                             const roleSelect = row.querySelector('.user-role').value;
+                            const coinsInput = parseInt(row.querySelector('.coins-input').value);
                             const checkboxesContainer = row.querySelector('.skins-checkboxes-container');
 
                             // Obtener las skins seleccionadas
@@ -177,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     'Content-Type': 'application/json',
                                     'Authorization': 'Bearer ' + localStorage.getItem('token')
                                 },
-                                body: JSON.stringify({ rol: roleSelect, skins: selectedSkins })
+                                body: JSON.stringify({ rol: roleSelect, coins: coinsInput, skins: selectedSkins })
                             });
 
                             if (response.ok) {
@@ -185,6 +217,30 @@ document.addEventListener('DOMContentLoaded', () => {
                                 location.reload();
                             } else {
                                 alert('Error al actualizar el usuario');
+                            }
+                        }
+
+                        // Eliminar usuario con confirmación
+                        if (e.target && e.target.classList.contains('delete-button')) {
+                            const id = e.target.dataset.id;
+                            const nombre = e.target.closest('tr').cells[0].innerHTML;
+                            const confirmDelete = confirm(`¿Estás seguro de que deseas eliminar al usuario ${nombre}?`);
+
+                            if (confirmDelete) {
+                                const response = await fetch(`/admin/api/users/${id}`, {
+                                    method: 'DELETE',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                    }
+                                });
+
+                                if (response.ok) {
+                                    alert('Usuario ' + nombre + ' eliminado con éxito');
+                                    location.reload();
+                                } else {
+                                    alert('Error al eliminar al usuario ' + nombre);
+                                }
                             }
                         }
                     });

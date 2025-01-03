@@ -49,7 +49,7 @@ public class UsuarioService {
         if (!updatedUser.getRol().equals(null)) {
             user.setRol(updatedUser.getRol());
         }
-        if (updatedUser.getSkins() != null) {
+        if (updatedUser.getSkins().size() > 0) {
             user.setSkins(updatedUser.getSkins());
         }
         if (updatedUser.getCoins() >= 0) {
@@ -62,5 +62,15 @@ public class UsuarioService {
         Usuario user = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         user.setLastLoginDate(new Date());
         return usuarioRepository.save(user);
+    }
+
+    public boolean deleteUser(String id) {
+        Optional<Usuario> user = usuarioRepository.findById(id);
+        if (user.isPresent()) {
+            usuarioRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

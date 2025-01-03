@@ -4,6 +4,7 @@ import com.example.demo.Skin;
 import com.example.demo.Users.Usuario;
 import com.example.demo.Users.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,5 +35,14 @@ public class AdminController {
     @PutMapping("/users/{id}")
     public Usuario updateUser(@PathVariable String id, @RequestBody Usuario usuario) {
         return usuarioService.updateUser(id, usuario);
+    }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
+        if (usuarioService.deleteUser(id)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }
