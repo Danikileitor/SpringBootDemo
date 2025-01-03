@@ -192,14 +192,31 @@ document.getElementById('play-button').addEventListener('click', function () {
     })
         .then(response => { return response.ok ? response.json() : Promise.reject(response) })
         .then(data => {
+            let resultado = data[0];
+            let skin = data[1];
+            const reels = document.querySelectorAll('.reel span');
             loadCoins();
-            document.getElementById('reel1').textContent = data.reel1;
-            document.getElementById('reel2').textContent = data.reel2;
-            document.getElementById('reel3').textContent = data.reel3;
-            document.getElementById('message').textContent = data.message;
-            if (data.message == "¡Ganaste!") {
-                updateCoins(50);
-            }
+
+            reels.forEach(reel => {
+                let currentCharacter = Math.floor(Math.random() * skin.length);;
+                const animation = setInterval(() => {
+                    reel.textContent = skin[currentCharacter];
+                    currentCharacter = (currentCharacter + 1) % skin.length;
+                }, 100); // Cambia el texto cada 100ms
+
+                // Detiene la animación después de 2 segundos
+                setTimeout(() => {
+                    clearInterval(animation);
+                    // Muestra el resultado final
+                    document.getElementById('reel1').textContent = resultado.reel1;
+                    document.getElementById('reel2').textContent = resultado.reel2;
+                    document.getElementById('reel3').textContent = resultado.reel3;
+                    document.getElementById('message').textContent = resultado.message;
+                    if (resultado.message == "¡Ganaste!") {
+                        updateCoins(50);
+                    }
+                }, 2000);
+            });
         })
         .catch(error => error.text().then(message => { console.error(message) }));
 });
@@ -229,7 +246,6 @@ function loadRanking() {
     })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             let rankingHtml = "<h3>RANKING</h3><table><tr><th>Usuario</th><th>Victorias</th></tr>";
             data.usuarios.forEach((usuario, i) => {
                 rankingHtml += `<tr><td>${usuario.username}</td><td>${data.victorias[i]}</td></tr>`;

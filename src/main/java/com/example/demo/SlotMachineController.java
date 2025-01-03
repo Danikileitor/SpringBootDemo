@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -144,7 +145,11 @@ public class SlotMachineController {
                             message, new Date());
                     dynamicSlotMachineService.saveResult(username, result);
 
-                    return ResponseEntity.ok(result);
+                    List<Object> envio = new ArrayList<>();
+                    envio.add(result);
+                    envio.add(Skin.fromString(request.getSkin()).getReels());
+
+                    return ResponseEntity.ok(envio);
                 } else {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No tienes suficientes monedas");
                 }
