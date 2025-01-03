@@ -283,6 +283,7 @@ select option {
     position: fixed;
     top: 20px;
     left: 20px;
+    bottom: auto;
     margin: 0 auto;
     font-size: 24px;
   }
