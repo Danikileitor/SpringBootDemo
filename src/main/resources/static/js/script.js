@@ -181,45 +181,49 @@ function updateCoins(delta) {
 };
 
 document.getElementById('play-button').addEventListener('click', function () {
-    var data = { "skin": document.getElementById('skin').value, "cost": 1 };
-    fetch('/play', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
-        },
-        body: JSON.stringify(data)
-    })
-        .then(response => { return response.ok ? response.json() : Promise.reject(response) })
-        .then(data => {
-            let resultado = data[0];
-            let skin = data[1];
-            const reels = document.querySelectorAll('.reel span');
-            loadCoins();
-
-            reels.forEach(reel => {
-                let currentCharacter = Math.floor(Math.random() * skin.length);;
-                const animation = setInterval(() => {
-                    reel.textContent = skin[currentCharacter];
-                    currentCharacter = (currentCharacter + 1) % skin.length;
-                }, 100); // Cambia el texto cada 100ms
-
-                // Detiene la animación después de 2 segundos
-                setTimeout(() => {
-                    clearInterval(animation);
-                    // Muestra el resultado final
-                    document.getElementById('reel1').textContent = resultado.reel1;
-                    document.getElementById('reel2').textContent = resultado.reel2;
-                    document.getElementById('reel3').textContent = resultado.reel3;
-                    document.getElementById('message').textContent = resultado.message;
-                    if (resultado.message == "¡Ganaste!") {
-                        updateCoins(50);
-                    }
-                    loadRanking();
-                }, 2000);
-            });
+    if (!this.classList.contains('disabled')) {
+        this.classList.add('disabled');
+        var data = { "skin": document.getElementById('skin').value, "cost": 1 };
+        fetch('/play', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            body: JSON.stringify(data)
         })
-        .catch(error => error.text().then(message => { console.error(message) }));
+            .then(response => { return response.ok ? response.json() : Promise.reject(response) })
+            .then(data => {
+                let resultado = data[0];
+                let skin = data[1];
+                const reels = document.querySelectorAll('.reel span');
+                loadCoins();
+
+                reels.forEach(reel => {
+                    let currentCharacter = Math.floor(Math.random() * skin.length);;
+                    const animation = setInterval(() => {
+                        reel.textContent = skin[currentCharacter];
+                        currentCharacter = (currentCharacter + 1) % skin.length;
+                    }, 100); // Cambia el texto cada 100ms
+
+                    // Detiene la animación después de 2 segundos
+                    setTimeout(() => {
+                        clearInterval(animation);
+                        // Muestra el resultado final
+                        document.getElementById('reel1').textContent = resultado.reel1;
+                        document.getElementById('reel2').textContent = resultado.reel2;
+                        document.getElementById('reel3').textContent = resultado.reel3;
+                        document.getElementById('message').textContent = resultado.message;
+                        if (resultado.message == "¡Ganaste!") {
+                            updateCoins(50);
+                        }
+                        this.classList.remove('disabled');
+                        loadRanking();
+                    }, 2000);
+                });
+            })
+            .catch(error => error.text().then(message => { console.error(message); this.classList.remove('disabled'); }));
+    }
 });
 
 document.getElementById('show-wins-button').addEventListener('click', function () {

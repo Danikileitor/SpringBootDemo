@@ -9,6 +9,15 @@ body {
   font-family: Arial, sans-serif;
 }
 
+.disabled,
+.disabled:hover,
+.disabled:active {
+  background-color: darkslategray;
+  color: rgb(53, 99, 99);
+  cursor: not-allowed;
+  transform: none;
+}
+
 h1 {
   text-align: center;
   color: #fff;
@@ -150,6 +159,9 @@ select option {
 
 #logout-button {
   display: block;
+  position: absolute;
+  bottom: 0;
+  left: 20px;
   margin: 20px auto;
   background-color: rgb(186, 32, 32);
 }
@@ -200,13 +212,12 @@ select option {
   border-collapse: collapse;
 }
 
-#ranking-panel table td~td {
+#ranking-panel table td ~ td {
   text-align: center;
   padding-left: 2em;
 }
 
 @media screen and (orientation: portrait) {
-
   h1 {
     font-size: 500%;
   }
@@ -273,7 +284,7 @@ select option {
     top: 20px;
     left: 20px;
     margin: 0 auto;
-    font-size: 24px
+    font-size: 24px;
   }
 
   #ranking-panel table td:first-child {
