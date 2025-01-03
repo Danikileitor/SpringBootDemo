@@ -213,8 +213,16 @@ public class SlotMachineController {
         }
     }
 
+    @PostMapping(value = "/ranking", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<?> getRanking() {
+        // Obtén los 5 jugadores con más victorias
+        List<Usuario> usuarios = usuarioService.getTop5Winners();
+        // Crea un objeto que contenga el ranking
+        return ResponseEntity.ok(new Ranking(usuarios, usuarioService));
+    }
+
     @JsonAutoDetect
-    // @Document(collection = "slot_machine_results")
     public static class SlotMachineResult {
         @Id
         private String id;

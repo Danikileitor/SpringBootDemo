@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('token', token);
             loadCoins();
             cargarSkins();
+            loadRanking();
             toggleSections();
         } else {
             alert('Usuario o contraseña incorrectos');
@@ -136,6 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (token) {
         loadCoins();
         cargarSkins();
+        loadRanking();
     }
 
     // Inicializa el estado inicial
@@ -216,3 +218,24 @@ document.getElementById('show-wins-button').addEventListener('click', function (
         })
         .catch(error => console.error('Error:', error));
 });
+
+function loadRanking() {
+    fetch('/ranking', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            let rankingHtml = "<h3>RANKING</h3><table><tr><th>Usuario</th><th>Victorias</th></tr>";
+            data.usuarios.forEach((usuario, i) => {
+                rankingHtml += `<tr><td>${usuario.username}</td><td>${data.victorias[i]}</td></tr>`;
+            });
+            rankingHtml += "</table>"
+            document.getElementById('ranking-panel').innerHTML = rankingHtml;
+        })
+        .catch(error => console.error('Error:', error));
+};

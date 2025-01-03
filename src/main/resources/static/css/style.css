@@ -170,3 +170,34 @@ select option {
   margin: 0;
   padding: 0;
 }
+
+#ranking-panel {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #333;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#ranking-panel h3 {
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+#ranking-panel table {
+  margin: 0 auto;
+}
+
+#ranking-panel table th,
+#ranking-panel table td~td {
+  text-align: center;
+}
+
+#ranking-panel table th {
+  padding-bottom: 10px;
+}
