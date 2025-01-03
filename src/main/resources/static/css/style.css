@@ -227,12 +227,12 @@ select option {
     font-size: 500%;
   }
 
-  .slot-machine .buttons {
+  .buttons {
     gap: 1em;
     height: 5vh;
   }
 
-  .slot-machine .buttons button {
+  .buttons button {
     font-size: 300%;
   }
 
@@ -292,5 +292,21 @@ select option {
   #ranking-panel hr {
     transform: translateY(-27px);
     width: 90%;
+  }
+
+  #auth-section {
+    padding: 30px;
+    width: 80%;
+  }
+
+  #auth-section input[type="text"],
+  #auth-section input[type="password"],
+  #auth-section input[type="email"] {
+    font-size: 300%;
+  }
+
+  #auth-section h2 {
+    font-size: 500%;
+    margin-top: 20px;
   }
 }
