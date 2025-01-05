@@ -134,6 +134,8 @@ document.addEventListener('DOMContentLoaded', () => {
         loadCoins();
         cargarSkins();
         loadRanking();
+    } else {
+        localStorage.removeItem('token');
     }
 
     // Inicializa el estado inicial
@@ -260,13 +262,7 @@ function loadRanking() {
 function checkAuth() {
     try {
         const token = JSON.parse(atob(localStorage.getItem('token').split('.')[1]));
-
-        if (token.exp < Math.floor(Date.now() / 1000) - token.iat) {
-            localStorage.removeItem('token');
-            return false;
-        } else {
-            return true;
-        }
+        return token.exp < Math.floor(Date.now() / 1000) - token.iat;
     } catch (error) {
         console.error("Error al decodificar el token:" + error);
         return false;
