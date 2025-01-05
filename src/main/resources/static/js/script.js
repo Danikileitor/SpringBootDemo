@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const skinSelect = document.getElementById('skin');
 
     const toggleSections = () => {
-        if (checkAuth()) {
+        if (!!localStorage.getItem('token')) {
             authSection.style.display = 'none';
             gameSection.style.display = 'block';
         } else {
