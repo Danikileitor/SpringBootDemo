@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutButton = document.getElementById('logout-button');
     const authSectionTitle = document.getElementById('auth-section-title');
     const skinSelect = document.getElementById('skin');
-    const token = localStorage.getItem('token');
 
     const toggleSections = () => {
         if (checkAuth()) {
