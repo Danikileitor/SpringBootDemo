@@ -159,25 +159,6 @@ function loadCoins() {
         .catch(error => console.error('Error:', error));
 };
 
-// Función para actualizar las monedas del usuario
-function updateCoins(delta) {
-    var data = { "delta": delta };
-    fetch("/coins", {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
-        },
-        body: JSON.stringify(data)
-    })
-        .then(response => response.json())
-        .then(data => {
-            loadCoins();
-            console.log("Monedas actualizadas: " + data);
-        })
-        .catch(error => console.error('Error:', error));
-};
-
 document.getElementById('play-button').addEventListener('click', function () {
     if (!this.classList.contains('disabled')) {
         this.classList.add('disabled');
@@ -213,7 +194,7 @@ document.getElementById('play-button').addEventListener('click', function () {
                         document.getElementById('reel3').textContent = resultado.reel3;
                         document.getElementById('message').textContent = resultado.message;
                         if (resultado.message == "¡Ganaste!") {
-                            updateCoins(50);
+                            loadCoins();
                         }
                         loadRanking();
                         this.classList.remove('disabled');

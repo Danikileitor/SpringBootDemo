@@ -145,6 +145,12 @@ public class SlotMachineController {
                             message, new Date());
                     dynamicSlotMachineService.saveResult(username, result);
 
+                    if (result.getMessage().equals("¡Ganaste!")) {
+                        newCoins += 50;
+                        usuarioOpt.get().setCoins(newCoins);
+                        usuarioService.updateUser(usuarioOpt.get().getId(), usuarioOpt.get());
+                    }
+
                     List<Object> envio = new ArrayList<>();
                     envio.add(result);
                     envio.add(Skin.fromString(request.getSkin()).getReels());
