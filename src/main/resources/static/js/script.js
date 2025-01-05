@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Comprueba si hay token almacenado
-    if (token) {
+    if (checkAuth()) {
         loadCoins();
         cargarSkins();
         loadRanking();
