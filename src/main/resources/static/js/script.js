@@ -10,9 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const skinSelect = document.getElementById('skin');
     const token = localStorage.getItem('token');
 
-    // Simular estado de sesión del usuario
-    const checkAuth = () => !!localStorage.getItem('token');
-
     const toggleSections = () => {
         if (checkAuth()) {
             authSection.style.display = 'none';
@@ -217,8 +214,8 @@ document.getElementById('play-button').addEventListener('click', function () {
                         if (resultado.message == "¡Ganaste!") {
                             updateCoins(50);
                         }
-                        this.classList.remove('disabled');
                         loadRanking();
+                        this.classList.remove('disabled');
                     }, 2000);
                 });
             })
@@ -260,3 +257,19 @@ function loadRanking() {
         })
         .catch(error => console.error('Error:', error));
 };
+
+function checkAuth() {
+    try {
+        const token = JSON.parse(atob(localStorage.getItem('token').split('.')[1]));
+
+        if (token.exp < Math.floor(Date.now() / 1000) - token.iat) {
+            localStorage.removeItem('token');
+            return false;
+        } else {
+            return true;
+        }
+    } catch (error) {
+        console.error("Error al decodificar el token:" + error);
+        return false;
+    }
+}

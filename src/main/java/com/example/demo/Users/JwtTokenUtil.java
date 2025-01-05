@@ -1,6 +1,7 @@
 package com.example.demo.Users;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -65,8 +66,13 @@ public class JwtTokenUtil {
 
             return Optional.ofNullable(claims.getSubject()); // Generalmente, el username está en 'sub'
         } catch (Exception e) {
-            e.printStackTrace(); // Puedes manejar esto mejor en producción
-            return Optional.empty();
+            if (e instanceof ExpiredJwtException) {
+                System.out.println("El token ha expirado");
+                return Optional.empty();
+            } else {
+                e.printStackTrace();
+                return Optional.empty();
+            }
         }
     }
 }
