@@ -243,7 +243,7 @@ function loadRanking() {
 function checkAuth() {
     try {
         const token = JSON.parse(atob(localStorage.getItem('token').split('.')[1]));
-        return token.exp < Math.floor(Date.now() / 1000) - token.iat;
+        return token.exp > Math.floor(Date.now() / 1000) - token.iat;
     } catch (error) {
         console.error("Error al decodificar el token:" + error);
         return false;
