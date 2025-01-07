@@ -70,6 +70,10 @@ button {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
+#tienda {
+  background-color: gold;
+}
+
 button:hover {
   background-color: #3e8e41;
 }

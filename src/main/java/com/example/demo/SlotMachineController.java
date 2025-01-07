@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +45,11 @@ public class SlotMachineController {
     @GetMapping("/admin")
     public String admin() {
         return "admin";
+    }
+
+    @GetMapping("/tienda")
+    public String tienda() {
+        return "tienda";
     }
 
     @Autowired
@@ -90,6 +96,20 @@ public class SlotMachineController {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+    }
+
+    @PostMapping("/skins/all")
+    public ResponseEntity<List<Map<String, Object>>> getAllSkinsData() {
+        List<Map<String, Object>> skins = Arrays.stream(Skin.values())
+                .map(skin -> {
+                    Map<String, Object> skinData = new HashMap<>();
+                    skinData.put("name", skin.getName());
+                    skinData.put("precio", skin.getPrecio());
+                    skinData.put("description", skin.getDescription());
+                    skinData.put("emojis", skin.getReels());
+                    return skinData;
+                }).collect(Collectors.toList());
+        return ResponseEntity.ok(skins);
     }
 
     @PostMapping(value = "/skins/desbloqueadas", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

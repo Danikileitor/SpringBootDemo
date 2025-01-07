@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Tienda</title>
+    <link rel="stylesheet" th:href="@{/css/tienda.css}">
+</head>
+
+<body>
+    <h1>Tienda</h1>
+
+    <div id="shop-container">
+        <div class="shop-section">
+            <h2>Skins</h2>
+            <table id="skins-list">
+                <colgroup>
+                    <col span="1" style="width: 25%;">
+                    <col span="1" style="width: 7%;">
+                    <col span="1" style="width: 60%;">
+                    <col span="1" style="width: 8%;">
+                 </colgroup>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Skin</th>
+                    <th></th>
+                </tr>
+            </table>
+        </div>
+        <button id="back-button">Volver</button>
+        <button id="logout-button">Cerrar Sesión</button>
+        <div id="coins-container" class="coins-container">
+            <span id="coins-amount" class="coins-amount"></span>
+        </div>
+    </div>
+
+    <script th:src="@{/js/tienda.js}"></script>
+</body>
+
+</html>

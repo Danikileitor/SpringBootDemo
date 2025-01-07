@@ -220,6 +220,10 @@ document.getElementById('show-wins-button').addEventListener('click', function (
         .catch(error => console.error('Error:', error));
 });
 
+document.getElementById('tienda').addEventListener('click', function () {
+    location.href = "/tienda";
+});
+
 function loadRanking() {
     fetch('/ranking', {
         method: 'POST',

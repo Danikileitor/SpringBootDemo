@@ -1,0 +1,195 @@
+html {
+  height: 100%;
+}
+
+body {
+  background-image: url("https://picsum.photos/1920/1080");
+  background-size: cover;
+  background-position: center;
+  font-family: Arial, sans-serif;
+}
+
+.disabled,
+.disabled:hover,
+.disabled:active {
+  background-color: darkslategray;
+  color: rgb(53, 99, 99);
+  cursor: not-allowed;
+  transform: none;
+}
+
+h1 {
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  font-size: 32px;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.shop-section {
+  width: 300px;
+  margin: 0 auto;
+  text-align: center;
+  background-color: #333;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.shop-section p {
+  font-size: 24px;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+button,
+.comprar {
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.comprar {
+  padding: 0.5em;
+}
+
+button:hover,
+.comprar {
+  background-color: #3e8e41;
+}
+
+button:active,
+.comprar {
+  transform: translateY(2px);
+}
+
+#logout-button {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 20px;
+  margin: 20px auto;
+  background-color: rgb(186, 32, 32);
+}
+
+#back-button {
+  display: block;
+  margin: 20px auto 0 auto;
+}
+
+.coins-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #333;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.coins-amount {
+  margin: 0;
+  padding: 0;
+}
+
+table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  background-color: #444;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+
+th,
+td {
+  padding: 0.5em 0 0.5em 0.5em;
+}
+
+tr th:last-child,
+tr td:last-child {
+  padding-right: 0.5em;
+}
+
+@media screen and (orientation: portrait) {
+
+  h1 {
+    font-size: 500%;
+  }
+
+  h2 {
+    font-size: 500%;
+    margin-top: 20px;
+  }
+
+  .shop-section {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .buttons {
+    gap: 1em;
+    height: 5vh;
+  }
+
+  .buttons button,
+  .shop-section p,
+  table td,
+  table th {
+    font-size: 300%;
+  }
+
+  .shop-section .buttons button:first-child {
+    width: 70%;
+  }
+
+  .shop-section .buttons button:last-child {
+    width: 30%;
+  }
+
+  #logout-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    bottom: auto;
+    margin: 0 auto;
+    font-size: 24px;
+  }
+
+  #coins-amount {
+    font-size: 200%;
+    padding: 1vw;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  .comprar {
+    font-size: 100%;
+  }
+}

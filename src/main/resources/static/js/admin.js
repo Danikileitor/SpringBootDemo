@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleSections();
     });
 
-    // Cargar skins disponibles con checkboxes
+    // Cargar skins disponibles
     const loadSkins = async () => {
         const response = await fetch('/admin/api/skins', {
             method: 'POST',
@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 // Cargar las skins disponibles
                                 const skinsData = await loadSkins();
 
-                                // Limpiar contenedor previo y agregar las skins
+                                // Limpiar contenedor previo y agregar las skins con checkboxes
                                 checkboxesContainer.innerHTML = ''; // Limpiar contenedor
 
                                 skinsData.forEach(skin => {
