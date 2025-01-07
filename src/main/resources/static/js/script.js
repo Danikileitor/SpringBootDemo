@@ -176,7 +176,7 @@ document.getElementById('play-button').addEventListener('click', function () {
                 let resultado = data[0];
                 let skin = data[1];
                 const reels = document.querySelectorAll('.reel span');
-                loadCoins();
+                pagarCoins(1);
 
                 reels.forEach(reel => {
                     let currentCharacter = Math.floor(Math.random() * skin.length);;
@@ -252,4 +252,10 @@ function checkAuth() {
         console.error("Error al decodificar el token:" + error);
         return false;
     }
+}
+
+function pagarCoins(cost) {
+    const coinsAmount = document.getElementById('coins-amount');
+    const dinero = parseInt(coinsAmount.textContent.slice(0, -2), 10);
+    coinsAmount.textContent = (dinero - cost) + "🪙";
 }
