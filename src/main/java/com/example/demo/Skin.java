@@ -5,7 +5,8 @@ public enum Skin {
     COCHES("Coches", 500, "Skin de coches", new String[] { "🚗", "🚕", "🏎️", "🚒", "🚓" }),
     CARAS("Caras", 50, "Skin de caras", new String[] { "😎", "🤔", "🤣", "😘", "🤠" }),
     FRUTAS("Frutas", 500, "Skin de frutas", new String[] { "🍎", "🍐", "🍌", "🍉", "🍍" }),
-    NAVIDAD("Navidad", "Skin de Navidad", new String[] { "🎅", "🎄", "❄️", "⛄", "🎁" });
+    NAVIDAD("Navidad", "Skin de Navidad", new String[] { "🎅", "🎄", "❄️", "⛄", "🎁" }),
+    BEBIDAS("Bebidas", 500, "Skin de bebidas", new String[] { "🥛", "☕", "🍷", "🍺", "🥤" });
 
     private final String name;
     private final int precio;
