@@ -75,12 +75,12 @@ button,
 }
 
 button:hover,
-.comprar {
+.comprar:hover {
   background-color: #3e8e41;
 }
 
 button:active,
-.comprar {
+.comprar:active {
   transform: translateY(2px);
 }
 
