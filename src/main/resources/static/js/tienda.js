@@ -87,6 +87,7 @@ async function tiendaSkins() {
     const skinsList = document.getElementById('skins-list');
     const skinsData = await loadSkins();
     const skinsDesbloqueadas = await cargarSkins();
+    const dinero = parseInt(document.getElementById('coins-amount').textContent.slice(0, -2), 10);
 
     skinsData.forEach(skin => {
         const fila = document.createElement('tr');
@@ -103,8 +104,13 @@ async function tiendaSkins() {
         })
         btnComprar.textContent = "🛒";
         btnComprar.className = "comprar";
-        btnComprar.title = "Comprar skin: " + skin.name;
-        btnComprar.addEventListener('click', () => comprarSkin(skin.name));
+        if (dinero >= skin.precio) {
+            btnComprar.title = "Comprar skin: " + skin.name;
+            btnComprar.addEventListener('click', () => comprarSkin(skin.name));
+        } else {
+            btnComprar.title = "No tienes suficientes 🪙";
+            btnComprar.classList.add('disabled');
+        }
 
         comprar.appendChild(btnComprar);
         fila.appendChild(nombre);

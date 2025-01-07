@@ -9,15 +9,6 @@ body {
   font-family: Arial, sans-serif;
 }
 
-.disabled,
-.disabled:hover,
-.disabled:active {
-  background-color: darkslategray;
-  color: rgb(53, 99, 99);
-  cursor: not-allowed;
-  transform: none;
-}
-
 h1 {
   text-align: center;
   color: #fff;
@@ -72,11 +63,15 @@ button,
 
 .comprar {
   padding: 0.5em;
+  background-color: gold;
 }
 
-button:hover,
-.comprar:hover {
+button:hover {
   background-color: #3e8e41;
+}
+
+.comprar:hover {
+  background-color: goldenrod;
 }
 
 button:active,
@@ -133,6 +128,15 @@ td {
 tr th:last-child,
 tr td:last-child {
   padding-right: 0.5em;
+}
+
+.disabled,
+.disabled:hover,
+.disabled:active {
+  background-color: darkslategray;
+  color: rgb(53, 99, 99);
+  cursor: not-allowed;
+  transform: none;
 }
 
 @media screen and (orientation: portrait) {
