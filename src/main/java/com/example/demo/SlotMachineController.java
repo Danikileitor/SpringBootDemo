@@ -121,7 +121,8 @@ public class SlotMachineController {
             if (usuarioOpt.isPresent()) {
                 Set<Skin> skins = Stream.of(usuarioOpt.get().getSkins())
                         .map(skinId -> {
-                            return skinRepository.findById(skinId.toString()).get();
+                            Optional<Skin> skinOpt = skinRepository.findById(skinId.toString());
+                            return skinOpt.get();
                         })
                         .collect(Collectors.toSet());
                 return ResponseEntity.ok(skins);
