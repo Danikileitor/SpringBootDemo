@@ -124,7 +124,7 @@ async function tiendaSkins() {
     });
 
     skinsDesbloqueadas.forEach(skin => {
-        const fila = skinsList.querySelector(`tr[skinid="${skin.id}"]`);
+        const fila = skinsList.querySelector(`tr[skinid="${skin}"]`);
         if (fila) {
             skinsList.removeChild(fila);
         }
