@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
 import org.springframework.http.HttpStatus;
@@ -110,6 +114,28 @@ public class SlotMachineController {
     @PostMapping(value = "/skins/desbloqueadas", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> obtenerSkinsDesbloqueadas(@RequestHeader("Authorization") String token) {
+        Optional<String> usernameOpt = JwtTokenUtil.extractUsernameFromToken(token);
+
+        if (usernameOpt.isPresent()) {
+            Optional<Usuario> usuarioOpt = usuarioService.findByUsername(usernameOpt.get());
+            if (usuarioOpt.isPresent()) {
+                Set<Skin> skins = Stream.of(usuarioOpt.get().getSkins())
+                        .map(skinId -> {
+                            return skinRepository.findById(skinId.toString()).get();
+                        })
+                        .collect(Collectors.toSet());
+                return ResponseEntity.ok(skins);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido");
+        }
+    }
+
+    @PostMapping(value = "/skins/desbloqueadas/id", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<?> obtenerSkinsDesbloqueadasId(@RequestHeader("Authorization") String token) {
         Optional<String> usernameOpt = JwtTokenUtil.extractUsernameFromToken(token);
 
         if (usernameOpt.isPresent()) {

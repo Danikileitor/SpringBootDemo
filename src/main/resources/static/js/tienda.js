@@ -66,7 +66,7 @@ async function loadSkins() {
 // Cargar las skins desbloqueadas
 async function cargarSkins() {
     try {
-        const response = await fetch('/skins/desbloqueadas', {
+        const response = await fetch('/skins/desbloqueadas/id', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
