@@ -8,8 +8,6 @@ import java.util.Set;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.example.demo.Skin;
-
 @Document(collection = "users")
 public class Usuario {
     @Id
@@ -19,7 +17,7 @@ public class Usuario {
     private String email;
     private Rol rol;
     private int coins;
-    private Set<Skin> skins;
+    private Set<String> skins;
     private Date lastLoginDate;
 
     public Usuario() {
@@ -32,11 +30,10 @@ public class Usuario {
         this.rol = Rol.ROLE_USER;
         this.coins = 0;
         this.skins = new HashSet<>();
-        this.skins.add(Skin.COMIDA_BASURA);
         this.lastLoginDate = new Date(0);
     }
 
-    public Usuario(String username, String password, String email, Rol rol, Set<Skin> skins) {
+    public Usuario(String username, String password, String email, Rol rol, Set<String> skins) {
         this(username, password, email);
         this.rol = rol;
         this.skins = skins;
@@ -90,11 +87,11 @@ public class Usuario {
         this.coins = coins;
     }
 
-    public Set<Skin> getSkins() {
+    public Set<String> getSkins() {
         return skins;
     }
 
-    public void setSkins(Set<Skin> skins) {
+    public void setSkins(Set<String> skins) {
         this.skins = skins;
     }
 
@@ -106,10 +103,12 @@ public class Usuario {
         this.lastLoginDate = lastLoginDate;
     }
 
-    public void desbloquearSkin(Skin skin) {
-        if (skins != null) {
+    public boolean desbloquearSkin(String skin) {
+        if (skins != null && !getSkins().contains(skin)) {
             skins.add(skin);
+            return true;
         }
+        return false;
     }
 
     public boolean isFirstLoginOfDay() {

@@ -47,7 +47,7 @@ function checkAuth() {
 // Cargar todas las skins
 async function loadSkins() {
     try {
-        const response = await fetch('/skins/all', {
+        const response = await fetch('/skins', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -74,7 +74,7 @@ async function cargarSkins() {
             }
         });
         if (!response.ok) {
-            throw new Error('No se pudo cargar las skins');
+            throw new Error('No se pudo cargar las skins desbloqueadas');
         }
         return await response.json();
     } catch (error) {
@@ -99,7 +99,7 @@ async function tiendaSkins() {
 
         nombre.textContent = skin.name;
         precio.textContent = skin.precio;
-        skin.emojis.forEach(emoji => {
+        skin.reels.forEach(emoji => {
             emojis.textContent += emoji;
         })
         btnComprar.textContent = "🛒";
@@ -118,12 +118,13 @@ async function tiendaSkins() {
         fila.appendChild(emojis);
         fila.appendChild(comprar);
         fila.title = skin.description;
+        fila.setAttribute('skinid', skin.id);
 
         skinsList.appendChild(fila);
     });
 
     skinsDesbloqueadas.forEach(skin => {
-        const fila = skinsList.querySelector(`tr[title="${skin.description}"]`);
+        const fila = skinsList.querySelector(`tr[skinid="${skin.id}"]`);
         if (fila) {
             skinsList.removeChild(fila);
         }

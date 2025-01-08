@@ -5,18 +5,27 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.DynamicSlotMachineService;
+import com.example.demo.Skins.Skin;
+import com.example.demo.Skins.SkinRepository;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class UsuarioService {
 
     @Autowired
     private DynamicSlotMachineService dynamicSlotMachineService;
+
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private SkinRepository skinRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -28,6 +37,7 @@ public class UsuarioService {
 
         Usuario usuario = new Usuario(username, passwordEncoder.encode(password), email);
         usuario.setRol(rol);
+        usuario.desbloquearSkin(skinRepository.findByName("Comida Basura").get().getId());
 
         return usuarioRepository.save(usuario);
     }
@@ -46,6 +56,14 @@ public class UsuarioService {
 
     public List<Usuario> getAllUsers() {
         return usuarioRepository.findAll();
+    }
+
+    public Set<Skin> getSkins(String[] skinsId) {
+        return Stream.of(skinsId)
+                .map(skinId -> {
+                    return skinRepository.findById(skinId).get();
+                })
+                .collect(Collectors.toSet());
     }
 
     public Usuario updateUser(String id, Usuario updatedUser) {

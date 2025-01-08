@@ -1,15 +1,9 @@
 package com.example.demo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
 import org.springframework.http.HttpStatus;
@@ -23,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.demo.Skins.Skin;
+import com.example.demo.Skins.SkinRepository;
 import com.example.demo.Users.JwtTokenUtil;
 import com.example.demo.Users.Usuario;
 import com.example.demo.Users.UsuarioService;
@@ -32,9 +28,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Controller
 public class SlotMachineController {
 
-    private String getRandomReel(String skin) {
-        String[] reels = Skin.fromString(skin).getReels();
-        return reels[(int) (Math.random() * reels.length)];
+    private String getRandomReel(Skin skin) {
+        Optional<Skin> skinOpt = skinRepository.findById(skin.getId());
+        if (skinOpt.isPresent()) {
+            String[] reels = skinOpt.get().getReels();
+            return reels[(int) (Math.random() * reels.length)];
+        } else {
+            throw new IllegalArgumentException("La skin no existe");
+        }
     }
 
     @GetMapping("/")
@@ -54,6 +55,9 @@ public class SlotMachineController {
 
     @Autowired
     private DynamicSlotMachineService dynamicSlotMachineService;
+
+    @Autowired
+    private SkinRepository skinRepository;
 
     @Autowired
     private UsuarioService usuarioService;
@@ -98,21 +102,12 @@ public class SlotMachineController {
         }
     }
 
-    @PostMapping("/skins/all")
-    public ResponseEntity<List<Map<String, Object>>> getAllSkinsData() {
-        List<Map<String, Object>> skins = Arrays.stream(Skin.values())
-                .map(skin -> {
-                    Map<String, Object> skinData = new HashMap<>();
-                    skinData.put("name", skin.getName());
-                    skinData.put("precio", skin.getPrecio());
-                    skinData.put("description", skin.getDescription());
-                    skinData.put("emojis", skin.getReels());
-                    return skinData;
-                }).collect(Collectors.toList());
-        return ResponseEntity.ok(skins);
+    @PostMapping(value = "/skins", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAllSkins() {
+        return ResponseEntity.ok(skinRepository.findAll());
     }
 
-    @PostMapping(value = "/skins/desbloqueadas", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/skins/desbloqueadas", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> obtenerSkinsDesbloqueadas(@RequestHeader("Authorization") String token) {
         Optional<String> usernameOpt = JwtTokenUtil.extractUsernameFromToken(token);
@@ -120,15 +115,7 @@ public class SlotMachineController {
         if (usernameOpt.isPresent()) {
             Optional<Usuario> usuarioOpt = usuarioService.findByUsername(usernameOpt.get());
             if (usuarioOpt.isPresent()) {
-                Set<Skin> skins = usuarioOpt.get().getSkins();
-                List<Map<String, String>> skinsData = skins.stream()
-                        .map(skin -> {
-                            Map<String, String> skinData = new HashMap<>();
-                            skinData.put("name", skin.getName());
-                            skinData.put("description", skin.getDescription());
-                            return skinData;
-                        }).collect(Collectors.toList());
-                return ResponseEntity.ok(skinsData);
+                return ResponseEntity.ok(usuarioOpt.get().getSkins());
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
             }
@@ -146,36 +133,43 @@ public class SlotMachineController {
             Optional<Usuario> usuarioOpt = usuarioService.findByUsername(usernameOpt.get());
             if (usuarioOpt.isPresent()) {
                 if (usuarioOpt.get().getCoins() >= 1) {
-                    String username = usernameOpt.get();
-                    String reel1 = getRandomReel(request.getSkin());
-                    String reel2 = getRandomReel(request.getSkin());
-                    String reel3 = getRandomReel(request.getSkin());
-                    int cost = request.getCost();
-                    String message = reel1.equals(reel2) && reel2.equals(reel3) ? "¡Ganaste!" : "¡Sigue intentando!";
-                    int attemptNumber = dynamicSlotMachineService.getNextAttemptNumber(username);
+                    Optional<Skin> skinOpt = skinRepository.findByName(request.getSkin());
+                    if (skinOpt.isPresent()) {
+                        String username = usernameOpt.get();
+                        String reel1 = getRandomReel(skinOpt.get());
+                        String reel2 = getRandomReel(skinOpt.get());
+                        String reel3 = getRandomReel(skinOpt.get());
+                        int cost = request.getCost();
+                        String message = reel1.equals(reel2) && reel2.equals(reel3) ? "¡Ganaste!"
+                                : "¡Sigue intentando!";
+                        int attemptNumber = dynamicSlotMachineService.getNextAttemptNumber(username);
 
-                    int newCoins = usuarioOpt.get().getCoins() - cost;
-                    if (newCoins < 0) {
-                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No tienes sufiences monedas");
-                    }
-                    usuarioOpt.get().setCoins(newCoins);
-                    usuarioService.updateUser(usuarioOpt.get().getId(), usuarioOpt.get());
-
-                    SlotMachineResult result = new SlotMachineResult(username, attemptNumber, cost, reel1, reel2, reel3,
-                            message, new Date());
-                    dynamicSlotMachineService.saveResult(username, result);
-
-                    if (result.getMessage().equals("¡Ganaste!")) {
-                        newCoins += 50;
+                        int newCoins = usuarioOpt.get().getCoins() - cost;
+                        if (newCoins < 0) {
+                            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No tienes sufiences monedas");
+                        }
                         usuarioOpt.get().setCoins(newCoins);
                         usuarioService.updateUser(usuarioOpt.get().getId(), usuarioOpt.get());
+
+                        SlotMachineResult result = new SlotMachineResult(username, attemptNumber, cost, reel1, reel2,
+                                reel3,
+                                message, new Date());
+                        dynamicSlotMachineService.saveResult(username, result);
+
+                        if (result.getMessage().equals("¡Ganaste!")) {
+                            newCoins += 50;
+                            usuarioOpt.get().setCoins(newCoins);
+                            usuarioService.updateUser(usuarioOpt.get().getId(), usuarioOpt.get());
+                        }
+
+                        List<Object> envio = new ArrayList<>();
+                        envio.add(result);
+                        envio.add(skinOpt.get().getReels());
+
+                        return ResponseEntity.ok(envio);
+                    } else {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La skin no existe");
                     }
-
-                    List<Object> envio = new ArrayList<>();
-                    envio.add(result);
-                    envio.add(Skin.fromString(request.getSkin()).getReels());
-
-                    return ResponseEntity.ok(envio);
                 } else {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No tienes suficientes monedas");
                 }
@@ -189,7 +183,7 @@ public class SlotMachineController {
 
     public static class PlayRequest {
         @JsonProperty("skin")
-        private String skin = Skin.COMIDA_BASURA.getName();
+        private String skin;
         @JsonProperty("cost")
         private int cost;
 
