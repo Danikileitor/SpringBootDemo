@@ -27,7 +27,7 @@ h2 {
 }
 
 .shop-section {
-  width: 300px;
+  width: fit-content;
   margin: 0 auto;
   text-align: center;
   background-color: #333;
@@ -151,7 +151,6 @@ tr td:last-child {
   }
 
   .shop-section {
-    width: 80%;
     margin: 0 auto;
   }
 
