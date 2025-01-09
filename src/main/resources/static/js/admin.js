@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>
                         <div class="skins">
                             <button data-id="${user.id}" class="edit-skins-button">✏️</button>
-                            <div class="user-skins">${user.skins.toReversed().map(skin => skin.name).join(', ')}</div>
+                            <div class="user-skins">${user.skins.toReversed().map(skin => skin).join(', ')}</div>
                             <div data-id="${user.id}" class="skins-checkboxes-container" style="display: none;">
                                 <!-- Se llenará con las skins -->
                             </div>
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 // Pre-seleccionar skins del usuario
                                 const currentSkins = user.skins || [];
                                 currentSkins.forEach(skin => {
-                                    const checkbox = checkboxesContainer.querySelector(`input[value="${skin.id}"]`);
+                                    const checkbox = checkboxesContainer.querySelector(`input[value="${skin}"]`);
                                     if (checkbox) {
                                         checkbox.checked = true;
                                     }
