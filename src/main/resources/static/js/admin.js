@@ -3,15 +3,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const adminSection = document.getElementById('admin-section');
     const loginForm = document.getElementById('loginForm');
     const logoutButton = document.getElementById('logout-button');
-    const token = localStorage.getItem('token');
 
     const toggleSections = () => {
-        if (checkAuth()) {
+        if (!!localStorage.getItem('token')) {
             authSection.style.display = 'none';
             adminSection.style.display = 'block';
         } else {
-            authSection.style.display = 'block';
             adminSection.style.display = 'none';
+            authSection.style.display = 'block';
         }
     };
 
@@ -59,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const cargarPanelAdmin = () => {
-        const loadMenu = () => {
+        const loadMenu = async () => {
             const menu = document.getElementById('menu');
             const menuList = document.createElement('ul');
             const menuItems = [
@@ -79,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
             menu.appendChild(menuList);
         };
 
-        const loadUsers = () => {
+        const loadUsersPanel = async () => {
             fetch('/admin/api/users', {
                 method: 'POST',
                 headers: {
@@ -301,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
         };
 
-        const loadSkinPanel = async () => {
+        const loadSkinsPanel = async () => {
             const skinsSection = document.getElementById('skins-section');
             //Formulario para crear skin
             const skinFormulario = document.createElement('form');
@@ -446,12 +445,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         loadMenu();
-        loadUsers();
-        loadSkinPanel();
+        loadUsersPanel();
+        loadSkinsPanel();
     };
 
-    if (token) {
+    if (checkAuth()) {
         cargarPanelAdmin();
+    } else {
+        localStorage.removeItem('token');
     }
 
     toggleSections();

@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
             authSection.style.display = 'none';
             gameSection.style.display = 'block';
         } else {
-            authSection.style.display = 'block';
             gameSection.style.display = 'none';
+            authSection.style.display = 'block';
         }
     };
 
