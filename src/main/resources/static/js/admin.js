@@ -59,7 +59,25 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const cargarPanelAdmin = () => {
-        const userTableBody = document.querySelector('#userTable tbody');
+        const loadMenu = () => {
+            const menu = document.getElementById('menu');
+            const menuList = document.createElement('ul');
+            const menuItems = [
+                { name: 'Usuarios', id: 'users-section' },
+                { name: 'Skins', id: 'skins-section' }
+            ];
+
+            menuItems.forEach(item => {
+                const menuItem = document.createElement('li');
+                const menuLink = document.createElement('a');
+                menuLink.href = `#${item.id}`;
+                menuLink.textContent = item.name;
+                menuItem.appendChild(menuLink);
+                menuList.appendChild(menuItem);
+            });
+
+            menu.appendChild(menuList);
+        };
 
         const loadUsers = () => {
             fetch('/admin/api/users', {
@@ -76,6 +94,41 @@ document.addEventListener('DOMContentLoaded', () => {
                     return response.json();
                 })
                 .then(data => {
+                    const usersSection = document.getElementById('users-section');
+                    const usersTitle = document.createElement('h2');
+                    const usersTable = document.createElement('table');
+                    const usersTableHeader = document.createElement('thead');
+                    const usersTableBody = document.createElement('tbody');
+                    const usersTableHeaderRow = document.createElement('tr');
+                    const usersTableHeaderUsername = document.createElement('th');
+                    const usersTableHeaderEmail = document.createElement('th');
+                    const usersTableHeaderRole = document.createElement('th');
+                    const usersTableHeaderCoins = document.createElement('th');
+                    const usersTableHeaderSkins = document.createElement('th');
+                    const usersTableHeaderActions = document.createElement('th');
+
+                    usersTitle.textContent = 'Usuarios';
+                    usersTableHeaderUsername.textContent = 'Usuario';
+                    usersTableHeaderEmail.textContent = 'Email';
+                    usersTableHeaderRole.textContent = 'Rol';
+                    usersTableHeaderCoins.textContent = 'Monedas';
+                    usersTableHeaderSkins.textContent = 'Skins';
+                    usersTableHeaderActions.textContent = 'Acciones';
+
+                    usersTableHeaderRow.appendChild(usersTableHeaderUsername);
+                    usersTableHeaderRow.appendChild(usersTableHeaderEmail);
+                    usersTableHeaderRow.appendChild(usersTableHeaderRole);
+                    usersTableHeaderRow.appendChild(usersTableHeaderCoins);
+                    usersTableHeaderRow.appendChild(usersTableHeaderSkins);
+                    usersTableHeaderRow.appendChild(usersTableHeaderActions);
+                    usersTableHeader.appendChild(usersTableHeaderRow);
+                    usersTable.appendChild(usersTableHeader);
+                    usersTable.appendChild(usersTableBody);
+                    usersTable.id = 'userTable';
+                    usersSection.appendChild(usersTitle);
+                    usersSection.appendChild(usersTable);
+
+                    const userTableBody = document.querySelector('#userTable tbody');
                     // Limpiar tabla antes de cargar
                     userTableBody.innerHTML = '';
 
@@ -249,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const loadSkinPanel = async () => {
-            const skinSection = document.getElementById('skins-section');
+            const skinsSection = document.getElementById('skins-section');
             //Formulario para crear skin
             const skinFormulario = document.createElement('form');
             const skinFormularioTitle = document.createElement('h2');
@@ -342,7 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     .then((data) => { alert("Se ha creado la skin: " + data.name); location.reload(); })
                     .catch((error) => { console.error(error); alert("Error al crear la skin"); });
             });
-            skinSection.appendChild(skinFormulario);
+            skinsSection.appendChild(skinFormulario);
 
             //Creamos la tabla para listar todas las skins
             const skinTable = document.createElement('table');
@@ -389,9 +442,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 fila.appendChild(vendible);
                 skinTable.appendChild(fila);
             });
-            skinSection.appendChild(skinTable);
+            skinsSection.appendChild(skinTable);
         }
 
+        loadMenu();
         loadUsers();
         loadSkinPanel();
     };
