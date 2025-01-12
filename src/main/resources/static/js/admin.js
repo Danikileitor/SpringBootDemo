@@ -431,7 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 precio.textContent = skin.precio;
                 description.textContent = skin.description;
                 reels.textContent = skin.reels;
-                vendible.textContent = skin.vendible;
+                vendible.textContent = skin.vendible ? '✅' : '❌';
                 fila.id = skin.id;
 
                 fila.appendChild(nombre);

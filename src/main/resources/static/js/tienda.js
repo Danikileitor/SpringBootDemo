@@ -90,37 +90,39 @@ async function tiendaSkins() {
     const dinero = parseInt(document.getElementById('coins-amount').textContent.slice(0, -2), 10);
 
     skinsData.forEach(skin => {
-        const fila = document.createElement('tr');
-        const nombre = document.createElement('td');
-        const precio = document.createElement('td');
-        const emojis = document.createElement('td');
-        const comprar = document.createElement('td');
-        const btnComprar = document.createElement('button');
+        if (skin.vendible == true) {
+            const fila = document.createElement('tr');
+            const nombre = document.createElement('td');
+            const precio = document.createElement('td');
+            const emojis = document.createElement('td');
+            const comprar = document.createElement('td');
+            const btnComprar = document.createElement('button');
 
-        nombre.textContent = skin.name;
-        precio.textContent = skin.precio;
-        skin.reels.forEach(emoji => {
-            emojis.textContent += emoji;
-        })
-        btnComprar.textContent = "🛒";
-        btnComprar.className = "comprar";
-        if (dinero >= skin.precio) {
-            btnComprar.title = "Comprar skin: " + skin.name;
-            btnComprar.addEventListener('click', () => comprarSkin(skin.name));
-        } else {
-            btnComprar.title = "No tienes suficientes 🪙";
-            btnComprar.classList.add('disabled');
+            nombre.textContent = skin.name;
+            precio.textContent = skin.precio;
+            skin.reels.forEach(emoji => {
+                emojis.textContent += emoji;
+            })
+            btnComprar.textContent = "🛒";
+            btnComprar.className = "comprar";
+            if (dinero >= skin.precio) {
+                btnComprar.title = "Comprar skin: " + skin.name;
+                btnComprar.addEventListener('click', () => comprarSkin(skin.name));
+            } else {
+                btnComprar.title = "No tienes suficientes 🪙";
+                btnComprar.classList.add('disabled');
+            }
+
+            comprar.appendChild(btnComprar);
+            fila.appendChild(nombre);
+            fila.appendChild(precio);
+            fila.appendChild(emojis);
+            fila.appendChild(comprar);
+            fila.title = skin.description;
+            fila.setAttribute('skinid', skin.id);
+
+            skinsList.appendChild(fila);
         }
-
-        comprar.appendChild(btnComprar);
-        fila.appendChild(nombre);
-        fila.appendChild(precio);
-        fila.appendChild(emojis);
-        fila.appendChild(comprar);
-        fila.title = skin.description;
-        fila.setAttribute('skinid', skin.id);
-
-        skinsList.appendChild(fila);
     });
 
     skinsDesbloqueadas.forEach(skin => {
