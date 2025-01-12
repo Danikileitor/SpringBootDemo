@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return response.json();
     };
 
-    const cargarPanelAdmin = () => {
+    const cargarPanelAdmin = async () => {
         const loadMenu = async () => {
             const menu = document.getElementById('menu');
             const menuList = document.createElement('ul');
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>
                         <div class="skins">
                             <button data-id="${user.id}" class="edit-skins-button">✏️</button>
-                            <div class="user-skins">${user.skins.toReversed().map(skin => skin).join(', ')}</div>
+                            <div class="user-skins">${user.skins.map(skin => document.getElementById(skin).firstChild.textContent).join(', ')}</div>
                             <div data-id="${user.id}" class="skins-checkboxes-container" style="display: none;">
                                 <!-- Se llenará con las skins -->
                             </div>
@@ -249,8 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             const checkboxesContainer = row.querySelector('.skins-checkboxes-container');
 
                             // Obtener las skins seleccionadas
-                            const selectedSkins = Array.from(checkboxesContainer.querySelectorAll('input:checked'))
-                                .map(checkbox => checkbox.value);
+                            const selectedSkins = Array.from(checkboxesContainer.querySelectorAll('input:checked')).reverse().map(checkbox => checkbox.value);
 
                             // Realizar el PUT con los datos actualizados
                             const response = await fetch(`/admin/api/users/${id}`, {
@@ -433,6 +432,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 description.textContent = skin.description;
                 reels.textContent = skin.reels;
                 vendible.textContent = skin.vendible;
+                fila.id = skin.id;
 
                 fila.appendChild(nombre);
                 fila.appendChild(precio);
@@ -444,9 +444,9 @@ document.addEventListener('DOMContentLoaded', () => {
             skinsSection.appendChild(skinTable);
         }
 
-        loadMenu();
-        loadUsersPanel();
-        loadSkinsPanel();
+        await loadMenu();
+        await loadSkinsPanel();
+        await loadUsersPanel();
     };
 
     if (checkAuth()) {
