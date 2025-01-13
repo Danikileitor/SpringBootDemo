@@ -17,6 +17,7 @@ public class Usuario {
     private String email;
     private Rol rol;
     private int coins;
+    private int wins;
     private Set<String> skins;
     private Date lastLoginDate;
 
@@ -29,6 +30,7 @@ public class Usuario {
         this.email = email;
         this.rol = Rol.ROLE_USER;
         this.coins = 0;
+        this.wins = 0;
         this.skins = new HashSet<>();
         this.lastLoginDate = new Date(0);
     }
@@ -87,6 +89,14 @@ public class Usuario {
         this.coins = coins;
     }
 
+    public int getWins() {
+        return wins;
+    }
+
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
     public Set<String> getSkins() {
         return skins;
     }
@@ -119,5 +129,9 @@ public class Usuario {
 
         return lastLogin.get(Calendar.DAY_OF_YEAR) != today.get(Calendar.DAY_OF_YEAR)
                 || lastLogin.get(Calendar.YEAR) != today.get(Calendar.YEAR);
+    }
+
+    public void victoria() {
+        wins++;
     }
 }

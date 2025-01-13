@@ -188,6 +188,7 @@ public class SlotMachineController {
                         if (result.getMessage().equals("¡Ganaste!")) {
                             newCoins += 50;
                             usuarioOpt.get().setCoins(newCoins);
+                            usuarioService.victoria(usuarioOpt.get().getId());
                             usuarioService.updateUser(usuarioOpt.get().getId(), usuarioOpt.get());
                         }
 
@@ -255,11 +256,8 @@ public class SlotMachineController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido");
         }
 
-        String username = usernameOpt.get();
-        String collectionName = username; // Usamos el nombre del usuario como nombre de colección
-
         try {
-            long wins = dynamicSlotMachineService.getCountByMessage(collectionName, "¡Ganaste!");
+            int wins = usuarioService.getWins(usernameOpt.get());
             return ResponseEntity.ok(wins);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

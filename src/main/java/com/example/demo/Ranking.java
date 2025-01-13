@@ -9,12 +9,12 @@ import com.example.demo.Users.UsuarioService;
 public class Ranking {
 
     private List<Usuario> usuarios;
-    private List<Long> victorias;
+    private List<Integer> victorias;
 
     public Ranking(List<Usuario> usuarios, UsuarioService usuarioService) {
         this.usuarios = usuarios;
 
-        List<Long> victorias = new ArrayList<>();
+        List<Integer> victorias = new ArrayList<>();
         for (Usuario usuario : usuarios) {
             victorias.add(usuarioService.getWins(usuario.getId()));
         }
@@ -22,7 +22,7 @@ public class Ranking {
         this.victorias = victorias;
     }
 
-    public List<Long> getVictorias() {
+    public List<Integer> getVictorias() {
         return victorias;
     }
 

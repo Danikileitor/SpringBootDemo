@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.DynamicSlotMachineService;
 import com.example.demo.Skins.Skin;
 import com.example.demo.Skins.SkinRepository;
 
@@ -17,9 +16,6 @@ import java.util.stream.Stream;
 
 @Service
 public class UsuarioService {
-
-    @Autowired
-    private DynamicSlotMachineService dynamicSlotMachineService;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -96,9 +92,15 @@ public class UsuarioService {
         }
     }
 
-    public long getWins(String id) {
+    public int getWins(String id) {
         Usuario user = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        return dynamicSlotMachineService.getCountByMessage(user.getUsername(), "¡Ganaste!");
+        return user.getWins();
+    }
+
+    public Usuario victoria(String id) {
+        Usuario user = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        user.victoria();
+        return usuarioRepository.save(user);
     }
 
     public List<Usuario> getTop5Winners() {
