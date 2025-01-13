@@ -109,6 +109,11 @@ public class SlotMachineController {
         return ResponseEntity.ok(skinRepository.findAll());
     }
 
+    @PostMapping(value = "/skins/vendibles", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> obtenerSkinsVendibles(@RequestBody boolean vendible) {
+        return ResponseEntity.ok(skinRepository.findAllByVendible(vendible));
+    }
+
     @PostMapping(value = "/skins/desbloqueadas", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> obtenerSkinsDesbloqueadas(@RequestHeader("Authorization") String token) {
