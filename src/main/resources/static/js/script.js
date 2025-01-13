@@ -267,9 +267,7 @@ function loadRanking() {
                 rankingTable.appendChild(fila);
             });
 
-            rankingPanel.appendChild(rankingTitle);
-            rankingPanel.appendChild(hr);
-            rankingPanel.appendChild(rankingTable);
+            rankingPanel.replaceChildren(rankingTitle, hr, rankingTable);
         })
         .catch(error => console.error('Error:', error));
 };
