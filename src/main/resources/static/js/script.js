@@ -234,12 +234,42 @@ function loadRanking() {
     })
         .then(response => response.json())
         .then(data => {
-            let rankingHtml = "<h3>RANKING</h3><hr><table>";
+            const rankingPanel = document.getElementById('ranking-panel');
+            const rankingTitle = document.createElement('h3');
+            const hr = document.createElement('hr');
+            const rankingTable = document.createElement('table');
+            const rankingTableGroup = document.createElement('colgroup');
+            const colNombre = document.createElement('col');
+            const colVictorias = document.createElement('col');
+
+            rankingTitle.textContent = "RANKING";
+            colNombre.span = "1";
+            colNombre.style = "width: 75%;";
+            colVictorias.span = "1";
+            colVictorias.style = "width: 25%;";
+
+            rankingTableGroup.appendChild(colNombre);
+            rankingTableGroup.appendChild(colVictorias);
+            rankingTable.appendChild(rankingTableGroup);
+
             data.usuarios.forEach((usuario, i) => {
-                rankingHtml += `<tr><td>${usuario.username}</td><td>${data.victorias[i]}</td></tr>`;
+                const fila = document.createElement('tr');
+                const nombre = document.createElement('td');
+                const victorias = document.createElement('td');
+
+                nombre.textContent = usuario.username;
+                nombre.title = usuario.username;
+                victorias.textContent = data.victorias[i];
+                victorias.title = data.victorias[i] + " victorias";
+
+                fila.appendChild(nombre);
+                fila.appendChild(victorias);
+                rankingTable.appendChild(fila);
             });
-            rankingHtml += "</table>"
-            document.getElementById('ranking-panel').innerHTML = rankingHtml;
+
+            rankingPanel.appendChild(rankingTitle);
+            rankingPanel.appendChild(hr);
+            rankingPanel.appendChild(rankingTable);
         })
         .catch(error => console.error('Error:', error));
 };

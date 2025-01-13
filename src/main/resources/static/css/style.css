@@ -192,6 +192,7 @@ select option {
   position: absolute;
   top: 20px;
   left: 20px;
+  width: 30%;
   background-color: #333;
   padding: 10px;
   border-radius: 10px;
@@ -214,11 +215,19 @@ select option {
 #ranking-panel table {
   margin: 0 auto;
   border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
 }
 
 #ranking-panel table td ~ td {
   text-align: center;
   padding-left: 2em;
+}
+
+#ranking-panel table td:first-child {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @media screen and (orientation: portrait) {
@@ -294,6 +303,10 @@ select option {
 
   #ranking-panel table td:first-child {
     padding-left: 10%;
+  }
+
+  #ranking-panel table td ~ td {
+    padding-left: 0;
   }
 
   #coins-amount {
