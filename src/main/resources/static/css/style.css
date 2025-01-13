@@ -219,7 +219,7 @@ select option {
   table-layout: fixed;
 }
 
-#ranking-panel table td ~ td {
+#ranking-panel table td~td {
   text-align: center;
   padding-left: 2em;
 }
@@ -305,7 +305,7 @@ select option {
     padding-left: 10%;
   }
 
-  #ranking-panel table td ~ td {
+  #ranking-panel table td~td {
     padding-left: 0;
   }
 

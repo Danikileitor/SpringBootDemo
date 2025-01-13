@@ -96,6 +96,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     const usersSection = document.getElementById('users-section');
                     const usersTitle = document.createElement('h2');
                     const usersTable = document.createElement('table');
+                    const usersTableGroup = document.createElement('colgroup');
+                    const usersTableColUsername = document.createElement('col');
+                    const usersTableColEmail = document.createElement('col');
+                    const usersTableColRole = document.createElement('col');
+                    const usersTableColCoins = document.createElement('col');
+                    const usersTableColSkins = document.createElement('col');
+                    const usersTableColActions = document.createElement('col');
                     const usersTableHeader = document.createElement('thead');
                     const usersTableBody = document.createElement('tbody');
                     const usersTableHeaderRow = document.createElement('tr');
@@ -106,6 +113,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     const usersTableHeaderSkins = document.createElement('th');
                     const usersTableHeaderActions = document.createElement('th');
 
+                    usersTableColUsername.span = "1";
+                    usersTableColUsername.style = "width: 20%";
+                    usersTableColEmail.span = "1";
+                    usersTableColEmail.style = "width: 20%";
+                    usersTableColRole.span = "1";
+                    usersTableColRole.style = "width: 10%";
+                    usersTableColCoins.span = "1";
+                    usersTableColCoins.style = "width: 10%";
+                    usersTableColSkins.span = "1";
+                    usersTableColSkins.style = "width: 20%";
+                    usersTableColActions.span = "1";
+                    usersTableColActions.style = "width: 20%";
                     usersTitle.textContent = 'Usuarios';
                     usersTableHeaderUsername.textContent = 'Usuario';
                     usersTableHeaderEmail.textContent = 'Email';
@@ -114,6 +133,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     usersTableHeaderSkins.textContent = 'Skins';
                     usersTableHeaderActions.textContent = 'Acciones';
 
+                    usersTableGroup.appendChild(usersTableColUsername);
+                    usersTableGroup.appendChild(usersTableColEmail);
+                    usersTableGroup.appendChild(usersTableColRole);
+                    usersTableGroup.appendChild(usersTableColCoins);
+                    usersTableGroup.appendChild(usersTableColSkins);
+                    usersTableGroup.appendChild(usersTableColActions);
                     usersTableHeaderRow.appendChild(usersTableHeaderUsername);
                     usersTableHeaderRow.appendChild(usersTableHeaderEmail);
                     usersTableHeaderRow.appendChild(usersTableHeaderRole);
@@ -121,6 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     usersTableHeaderRow.appendChild(usersTableHeaderSkins);
                     usersTableHeaderRow.appendChild(usersTableHeaderActions);
                     usersTableHeader.appendChild(usersTableHeaderRow);
+                    usersTable.appendChild(usersTableGroup);
                     usersTable.appendChild(usersTableHeader);
                     usersTable.appendChild(usersTableBody);
                     usersTable.id = 'userTable';
@@ -135,10 +161,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         const row = document.createElement('tr');
                         row.dataset.user = JSON.stringify(user);  // Aquí agregamos la referencia al usuario en la fila
                         row.innerHTML = `
-                    <td>${user.username}</td>
-                    <td>${user.email}</td>
+                    <td title="${user.username}">${user.username}</td>
+                    <td title="${user.email}">${user.email}</td>
                     <td>
-                        <select data-id="${user.id}" class="user-role">
+                        <select data-id="${user.id}" class="user-role" title="Escoge un rol">
                             <option value="ROLE_USER" ${user.rol === 'ROLE_USER' ? 'selected' : ''}>USER</option>
                             <option value="ROLE_ADMIN" ${user.rol === 'ROLE_ADMIN' ? 'selected' : ''}>ADMIN</option>
                             <option value="ROLE_VIP" ${user.rol === 'ROLE_VIP' ? 'selected' : ''}>VIP</option>
@@ -146,15 +172,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     </td>
                     <td>
                         <div class="coins">
-                            <button data-id="${user.id}" class="edit-coins-button">✏️</button>
-                            <span>${user.coins}</span>
+                            <button data-id="${user.id}" class="edit-coins-button" title="Modificar Monedas">✏️</button>
+                            <span title="${user.coins}">${user.coins}</span>
                             <input type="number" class="coins-input" value="${user.coins}" style="display: none;">
                         </div>
                     </td>
                     <td>
                         <div class="skins">
-                            <button data-id="${user.id}" class="edit-skins-button">✏️</button>
-                            <div class="user-skins">${user.skins.map(skin => document.getElementById(skin).firstChild.textContent).join(', ')}</div>
+                            <button data-id="${user.id}" class="edit-skins-button" title="Modificar Skins">✏️</button>
+                            <div class="user-skins" title="${user.skins.length}">${user.skins.map(skin => document.getElementById(skin).firstChild.textContent).join(', ')}</div>
                             <div data-id="${user.id}" class="skins-checkboxes-container" style="display: none;">
                                 <!-- Se llenará con las skins -->
                             </div>
@@ -162,8 +188,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     </td>
                     <td>
                         <div class="acciones">
-                            <button data-id="${user.id}" class="save-button">Guardar</button>
-                            <button data-id="${user.id}" class="delete-button">Eliminar</button>
+                            <button data-id="${user.id}" class="save-button" title="Guardar">Guardar</button>
+                            <button data-id="${user.id}" class="delete-button" title="Eliminar">Eliminar</button>
                         </div>
                     </td>
                     `;

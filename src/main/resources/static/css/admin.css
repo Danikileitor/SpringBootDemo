@@ -4,7 +4,8 @@ body {
   margin: 20px;
 }
 
-h1, h2 {
+h1,
+h2 {
   text-align: center;
   color: #333;
 }
@@ -57,6 +58,16 @@ table td {
 
 table th {
   background-color: #f2f2f2;
+}
+
+#userTable {
+  table-layout: fixed;
+}
+
+#userTable td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .skins,
