@@ -252,16 +252,21 @@ public class SlotMachineController {
     public ResponseEntity<?> getWins(@RequestHeader("Authorization") String token) {
         Optional<String> usernameOpt = JwtTokenUtil.extractUsernameFromToken(token);
 
-        if (usernameOpt.isEmpty()) {
+        if (usernameOpt.isPresent()) {
+            Optional<Usuario> usuarioOpt = usuarioService.findByUsername(usernameOpt.get());
+            if (usuarioOpt.isPresent()) {
+                try {
+                    int wins = usuarioService.getWins(usuarioOpt.get().getId());
+                    return ResponseEntity.ok(wins);
+                } catch (Exception e) {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                            .body("Error al obtener las victorias: " + e.getMessage());
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+            }
+        } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido");
-        }
-
-        try {
-            int wins = usuarioService.getWins(usernameOpt.get());
-            return ResponseEntity.ok(wins);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al obtener las victorias: " + e.getMessage());
         }
     }
 
