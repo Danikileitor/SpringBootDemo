@@ -3,8 +3,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameSection = document.getElementById('game-section');
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
+    const restablecerForm = document.getElementById('restablecerForm');
     const showLoginButton = document.getElementById('showLogin');
+    const showLoginButton2 = document.getElementById('showLogin2');
     const showRegisterButton = document.getElementById('showRegister');
+    const showRestablecerButton = document.getElementById('showRestablecer');
     const logoutButton = document.getElementById('logout-button');
     const authSectionTitle = document.getElementById('auth-section-title');
     const skinSelect = document.getElementById('skin');
@@ -43,25 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Para cambiar el title del select igual a su option
-    skinSelect.addEventListener('change', () => {
-        skinSelect.title = skinSelect.options[skinSelect.selectedIndex].title;
-        localStorage.setItem("lastSkin", skinSelect.options[skinSelect.selectedIndex].value);
-    });
-
-    // Alternar entre login y registro
-    showLoginButton.addEventListener('click', () => {
-        authSectionTitle.innerText = 'Iniciar Sesión';
-        loginForm.style.display = 'block';
-        registerForm.style.display = 'none';
-    });
-
-    showRegisterButton.addEventListener('click', () => {
-        loginForm.style.display = 'none';
-        authSectionTitle.innerText = 'Registrarse';
-        registerForm.style.display = 'block';
-    });
-
     // Manejo del formulario de registro
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -84,6 +68,59 @@ document.addEventListener('DOMContentLoaded', () => {
             const error = await response.text();
             alert(`Error: ${error}`);
         }
+    });
+
+    // Manejo del formulario de restablecer contraseña
+    restablecerForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const correo = document.getElementById('restablecerEmail').value.trim();
+        const mensajeDiv = document.getElementById('restablecerMessage');
+
+        if (correo !== '') {
+            fetch('/api/auth/olvidar-contrasena', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: correo })
+            })
+                .then(response => response.text())
+                .then(data => mensajeDiv.innerHTML = data)
+                .catch(error => mensajeDiv.innerHTML = error);
+        } else {
+            mensajeDiv.innerHTML = 'Por favor, ingrese su correo electrónico.';
+        }
+    });
+
+    // Para cambiar el title del select igual a su option
+    skinSelect.addEventListener('change', () => {
+        skinSelect.title = skinSelect.options[skinSelect.selectedIndex].title;
+        localStorage.setItem("lastSkin", skinSelect.options[skinSelect.selectedIndex].value);
+    });
+
+    // Alternar entre login y registro
+    showLoginButton.addEventListener('click', () => {
+        registerForm.style.display = 'none';
+        authSectionTitle.innerText = 'Iniciar Sesión';
+        loginForm.style.display = 'block';
+    });
+
+    showLoginButton2.addEventListener('click', () => {
+        restablecerForm.style.display = 'none';
+        authSectionTitle.innerText = 'Iniciar Sesión';
+        loginForm.style.display = 'block';
+    });
+
+    showRegisterButton.addEventListener('click', () => {
+        loginForm.style.display = 'none';
+        authSectionTitle.innerText = 'Registrarse';
+        registerForm.style.display = 'block';
+    });
+
+    showRestablecerButton.addEventListener('click', () => {
+        loginForm.style.display = 'none';
+        authSectionTitle.innerText = 'Restablecer Contraseña';
+        restablecerForm.style.display = 'block';
     });
 
     // Manejo del cierre de sesión

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.Skins.Skin;
 import com.example.demo.Skins.SkinRepository;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +32,10 @@ public class UsuarioService {
             throw new IllegalArgumentException("El nombre de usuario ya existe");
         }
 
+        if (usuarioRepository.findByEmail(email).isPresent()) {
+            throw new IllegalArgumentException("El email ya está en uso");
+        }
+
         Usuario usuario = new Usuario(username, passwordEncoder.encode(password), email);
         usuario.setRol(rol);
         usuario.desbloquearSkin(skinRepository.findByName("Comida Basura").get().getId());
@@ -48,6 +53,10 @@ public class UsuarioService {
 
     public Optional<Usuario> findByUsername(String username) {
         return usuarioRepository.findByUsername(username);
+    }
+
+    public Optional<Usuario> findByEmail(String email) {
+        return usuarioRepository.findByEmail(email);
     }
 
     public List<Usuario> getAllUsers() {
@@ -113,5 +122,23 @@ public class UsuarioService {
         });
 
         return usuarios.subList(0, Math.min(5, usuarios.size()));
+    }
+
+    public void guardarTokenRestablecimientoContrasena(Usuario usuario, String token) {
+        usuario.setTokenRestablecimientoContrasena(token);
+        usuario.setFechaExpiracionTokenRestablecimientoContrasena(LocalDateTime.now().plusHours(1)); // Token válido por
+                                                                                                     // 1 hora
+        usuarioRepository.save(usuario);
+    }
+
+    public Optional<Usuario> findByTokenRestablecimientoContrasena(String token) {
+        return usuarioRepository.findByTokenRestablecimientoContrasena(token);
+    }
+
+    public void actualizarContrasena(Usuario usuario, String nuevaContrasena) {
+        usuario.setPassword(passwordEncoder.encode(nuevaContrasena));
+        usuario.setTokenRestablecimientoContrasena(null);
+        usuario.setFechaExpiracionTokenRestablecimientoContrasena(null);
+        usuarioRepository.save(usuario);
     }
 }

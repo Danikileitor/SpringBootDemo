@@ -20,6 +20,8 @@
                 <button type="submit" title="Iniciar Sesión">Iniciar Sesión</button>
                 <button id="showRegister" type="button" title="Cambiar al formulario de Registro">¿Registrarse?</button>
             </div>
+            <button id="showRestablecer" type="button" title="¿Has olvidado tu contraseña?">¿Has olvidado tu
+                contraseña?</button>
         </form>
 
         <form id="registerForm" style="display: none;">
@@ -28,8 +30,19 @@
             <input type="email" id="registerEmail" placeholder="Correo electrónico" required>
             <div class="buttons">
                 <button type="submit" title="Registrarse">Registrarse</button>
-                <button id="showLogin" type="button" title="Cambiar al formulario de Iniciar Sesión">¿Iniciar Sesión?</button>
+                <button id="showLogin" type="button" title="Cambiar al formulario de Iniciar Sesión">¿Iniciar
+                    Sesión?</button>
             </div>
+        </form>
+
+        <form id="restablecerForm" style="display: none;">
+            <input type="email" id="restablecerEmail" name="restablecerEmail" placeholder="Correo electrónico" required>
+            <div class="buttons">
+                <button type="submit" title="Solicitar restablecimiento de contraseña">Restablecer</button>
+                <button id="showLogin2" type="button" title="Cambiar al formulario de Iniciar Sesión">¿Iniciar
+                    Sesión?</button>
+            </div>
+            <p id="restablecerMessage"></p>
         </form>
     </div>
 

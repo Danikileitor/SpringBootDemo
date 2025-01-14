@@ -1,5 +1,6 @@
 package com.example.demo.Users;
 
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -20,6 +21,8 @@ public class Usuario {
     private int wins;
     private Set<String> skins;
     private Date lastLoginDate;
+    private String tokenRestablecimientoContrasena;
+    private LocalDateTime fechaExpiracionTokenRestablecimientoContrasena;
 
     public Usuario() {
     }
@@ -33,6 +36,8 @@ public class Usuario {
         this.wins = 0;
         this.skins = new HashSet<>();
         this.lastLoginDate = new Date(0);
+        this.tokenRestablecimientoContrasena = null;
+        this.fechaExpiracionTokenRestablecimientoContrasena = null;
     }
 
     public Usuario(String username, String password, String email, Rol rol, Set<String> skins) {
@@ -111,6 +116,23 @@ public class Usuario {
 
     public void setLastLoginDate(Date lastLoginDate) {
         this.lastLoginDate = lastLoginDate;
+    }
+
+    public String getTokenRestablecimientoContrasena() {
+        return tokenRestablecimientoContrasena;
+    }
+
+    public void setTokenRestablecimientoContrasena(String tokenRestablecimientoContrasena) {
+        this.tokenRestablecimientoContrasena = tokenRestablecimientoContrasena;
+    }
+
+    public LocalDateTime getFechaExpiracionTokenRestablecimientoContrasena() {
+        return fechaExpiracionTokenRestablecimientoContrasena;
+    }
+
+    public void setFechaExpiracionTokenRestablecimientoContrasena(
+            LocalDateTime fechaExpiracionTokenRestablecimientoContrasena) {
+        this.fechaExpiracionTokenRestablecimientoContrasena = fechaExpiracionTokenRestablecimientoContrasena;
     }
 
     public boolean desbloquearSkin(String skin) {

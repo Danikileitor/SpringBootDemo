@@ -1,0 +1,117 @@
+/* Estilos generales */
+html {
+    height: 100%;
+}
+
+body {
+    background-image: url("https://picsum.photos/1920/1080");
+    background-size: cover;
+    background-position: center;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+#restablecer-section {
+    width: 30%;
+    padding: 20px;
+    background-color: #333;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    margin: 0 auto;
+}
+
+/* Estilos para el formulario */
+#formulario-restablecer {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+#formulario-restablecer input[type="password"],
+#formulario-restablecer input[type="email"] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #000000;
+    background-color: #222;
+    color: #fff;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+#formulario-restablecer input[type="password"]:focus,
+#formulario-restablecer input[type="email"]:focus {
+    border-color: #4caf50;
+    outline: none;
+}
+
+#formulario-restablecer button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+#formulario-restablecer button:hover {
+    background-color: #3e8e41;
+}
+
+#formulario-restablecer button:active {
+    transform: translateY(2px);
+}
+
+/* Estilos para el mensaje de error */
+#mensaje {
+    font-size: 20px;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+/* Estilos para el token */
+#token {
+    display: none;
+}
+
+/* Estilos para móvil en Vertical */
+@media screen and (orientation: portrait) {
+    h1 {
+        font-size: 500%;
+    }
+
+    #restablecer-section {
+        width: 80%;
+        padding: 30px;
+    }
+
+    #mensaje,
+    #formulario-restablecer button,
+    #formulario-restablecer input[type="password"],
+    #formulario-restablecer input[type="email"] {
+        font-size: 300%;
+        margin: 20px 0;
+    }
+
+    #formulario-restablecer button {
+        padding: 20px 40px;
+    }
+
+    #formulario-restablecer input[type="password"],
+    #formulario-restablecer input[type="email"] {
+        padding: 24px 40px;
+    }
+}

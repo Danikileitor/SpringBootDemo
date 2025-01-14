@@ -89,6 +89,13 @@ button:active {
   margin-bottom: 20px;
 }
 
+#restablecerMessage {
+  font-size: 19px;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
 select {
   padding: 10px 20px;
   font-size: 18px;
@@ -138,6 +145,10 @@ select option {
 
 #auth-section button {
   margin-top: 10px;
+}
+
+#auth-section #showRestablecer {
+  margin-top: 20px;
 }
 
 #auth-section input[type="text"],
@@ -251,12 +262,14 @@ select option {
     font-size: 500%;
   }
 
-  .buttons {
+  .buttons,
+  #showRestablecer {
     gap: 1em;
-    height: 5vh;
+    padding: auto;
   }
 
-  .buttons button {
+  .buttons button,
+  #showRestablecer {
     font-size: 300%;
   }
 
@@ -284,7 +297,8 @@ select option {
 
   #ranking-panel h3,
   #ranking-panel table td,
-  #message {
+  #message,
+  #restablecerMessage {
     font-size: 300%;
   }
 
@@ -314,7 +328,8 @@ select option {
     padding: 1vw;
   }
 
-  #message {
+  #message,
+  #restablecerMessage {
     margin-top: 20px;
   }
 
@@ -332,6 +347,13 @@ select option {
   #auth-section input[type="password"],
   #auth-section input[type="email"] {
     font-size: 300%;
+    padding: 24px 40px;
+    margin: 20px 0;
+  }
+
+  #auth-section button {
+    padding: 20px 40px;
+    margin: 20px 0;
   }
 
   #auth-section h2 {
