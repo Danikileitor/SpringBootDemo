@@ -167,42 +167,43 @@ public class SlotMachineController {
         Optional<String> usernameOpt = JwtTokenUtil.extractUsernameFromToken(token);
 
         if (usernameOpt.isPresent()) {
-            Optional<Usuario> usuarioOpt = usuarioService.findByUsername(usernameOpt.get());
+            String username = usernameOpt.get();
+            Optional<Usuario> usuarioOpt = usuarioService.findByUsername(username);
             if (usuarioOpt.isPresent()) {
-                if (usuarioOpt.get().getCoins() >= 1) {
+                Usuario usuario = usuarioOpt.get();
+                if (usuario.getCoins() >= 1) {
                     Optional<Skin> skinOpt = skinRepository.findByName(request.getSkin());
                     if (skinOpt.isPresent()) {
-                        String username = usernameOpt.get();
-                        String reel1 = getRandomReel(skinOpt.get());
-                        String reel2 = getRandomReel(skinOpt.get());
-                        String reel3 = getRandomReel(skinOpt.get());
+                        Skin skin = skinOpt.get();
+                        String reel1 = getRandomReel(skin);
+                        String reel2 = getRandomReel(skin);
+                        String reel3 = getRandomReel(skin);
                         int cost = request.getCost();
-                        String message = reel1.equals(reel2) && reel2.equals(reel3) ? "¡Ganaste!"
-                                : "¡Sigue intentando!";
+                        boolean win = reel1.equals(reel2) && reel2.equals(reel3);
+                        String message = win ? "¡Ganaste!" : "¡Sigue intentando!";
                         int attemptNumber = dynamicSlotMachineService.getNextAttemptNumber(username);
 
-                        int newCoins = usuarioOpt.get().getCoins() - cost;
+                        int newCoins = usuario.getCoins() - cost;
                         if (newCoins < 0) {
                             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No tienes sufiences monedas");
                         }
-                        usuarioOpt.get().setCoins(newCoins);
-                        usuarioService.updateUser(usuarioOpt.get().getId(), usuarioOpt.get());
+                        usuario.setCoins(newCoins);
+                        usuarioService.updateUser(usuario.getId(), usuario);
 
                         SlotMachineResult result = new SlotMachineResult(username, attemptNumber, cost, reel1, reel2,
-                                reel3,
-                                message, new Date());
+                                reel3, message, win, new Date());
                         dynamicSlotMachineService.saveResult(username, result);
 
-                        if (result.getMessage().equals("¡Ganaste!")) {
+                        if (result.isWin()) {
                             newCoins += 50;
-                            usuarioOpt.get().setCoins(newCoins);
-                            usuarioService.victoria(usuarioOpt.get().getId());
-                            usuarioService.updateUser(usuarioOpt.get().getId(), usuarioOpt.get());
+                            usuario.setCoins(newCoins);
+                            usuarioService.victoria(usuario.getId());
+                            usuarioService.updateUser(usuario.getId(), usuario);
                         }
 
                         List<Object> envio = new ArrayList<>();
                         envio.add(result);
-                        envio.add(skinOpt.get().getReels());
+                        envio.add(skin.getReels());
 
                         return ResponseEntity.ok(envio);
                     } else {
@@ -298,19 +299,21 @@ public class SlotMachineController {
         private String reel2;
         private String reel3;
         private String message;
+        private boolean win;
         private Date executionDate;
 
         public SlotMachineResult() {
         }
 
         public SlotMachineResult(String username, int attemptNumber, int cost, String reel1, String reel2, String reel3,
-                String message, Date executionDate) {
+                String message, boolean win, Date executionDate) {
             this.username = username;
             this.attemptNumber = attemptNumber;
             this.reel1 = reel1;
             this.reel2 = reel2;
             this.reel3 = reel3;
             this.message = message;
+            this.win = win;
             this.executionDate = executionDate;
         }
 
@@ -360,6 +363,14 @@ public class SlotMachineController {
 
         public void setMessage(String message) {
             this.message = message;
+        }
+
+        public boolean isWin() {
+            return win;
+        }
+
+        public void setWin(boolean win) {
+            this.win = win;
         }
 
         public String getId() {
