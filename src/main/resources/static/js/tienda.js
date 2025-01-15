@@ -39,7 +39,6 @@ function checkAuth() {
         const token = JSON.parse(atob(localStorage.getItem('token').split('.')[1]));
         return token.exp > Math.floor(Date.now() / 1000);
     } catch (error) {
-        console.error("Error al decodificar el token:" + error);
         return false;
     }
 }
