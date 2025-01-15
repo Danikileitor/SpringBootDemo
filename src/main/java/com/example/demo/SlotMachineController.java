@@ -196,23 +196,23 @@ public class SlotMachineController {
 
                         if (result.isWin()) {
                             switch (result.getReel1()) {
-                                case Object o when o == skin.getReels()[0] -> {
+                                case String o when o.equals(skin.getReels()[0]) -> {
                                     newCoins += (cost * 10);
                                 }
 
-                                case Object o when o == skin.getReels()[1] -> {
+                                case String o when o.equals(skin.getReels()[1]) -> {
                                     newCoins += (cost * 7);
                                 }
 
-                                case Object o when o == skin.getReels()[2] -> {
+                                case String o when o.equals(skin.getReels()[2]) -> {
                                     newCoins += (cost * 5);
                                 }
 
-                                case Object o when o == skin.getReels()[3] -> {
+                                case String o when o.equals(skin.getReels()[3]) -> {
                                     newCoins += (cost * 3);
                                 }
 
-                                case Object o when o == skin.getReels()[4] -> {
+                                case String o when o.equals(skin.getReels()[4]) -> {
                                     newCoins += (cost * 2);
                                 }
 
