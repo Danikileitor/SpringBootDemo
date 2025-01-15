@@ -1,5 +1,7 @@
 package com.example.demo.Skins;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,21 +22,33 @@ public class SkinService {
 
   public Skin updateSkin(String id, Skin updatedSkin) {
     Skin skin = skinRepository.findById(id).orElseThrow(() -> new RuntimeException("Skin no encontrada"));
-    if (!updatedSkin.getName().equals(null)) {
+    if (updatedSkin.getName() != null) {
       skin.setName(updatedSkin.getName());
     }
     if (updatedSkin.getPrecio() >= 0) {
       skin.setPrecio(updatedSkin.getPrecio());
     }
-    if (!updatedSkin.getDescription().equals(null)) {
+    if (updatedSkin.getDescription() != null) {
       skin.setDescription(updatedSkin.getDescription());
     }
-    if (updatedSkin.getReels().length > 0) {
-      skin.setReels(updatedSkin.getReels());
+    if (updatedSkin.getReels() != null) {
+      if (updatedSkin.getReels().length > 0) {
+        skin.setReels(updatedSkin.getReels());
+      }
     }
     if (updatedSkin.isVendible() == true || updatedSkin.isVendible() == false) {
       skin.setVendible(updatedSkin.isVendible());
     }
     return skinRepository.save(skin);
+  }
+
+  public boolean deleteSkin(String id) {
+    Optional<Skin> skin = skinRepository.findById(id);
+    if (skin.isPresent()) {
+      skinRepository.deleteById(id);
+      return true;
+    } else {
+      return false;
+    }
   }
 }

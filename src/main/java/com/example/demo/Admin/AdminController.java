@@ -36,14 +36,6 @@ public class AdminController {
         return usuarioService.getAllUsers();
     }
 
-    @PostMapping(value = "/skins/create", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Skin> createSkin(@RequestBody Skin skin) {
-        System.out.println(skin);
-        Skin newSkin = skinService.createSkin(skin);
-        System.out.println(newSkin);
-        return ResponseEntity.ok(newSkin);
-    }
-
     @PutMapping("/users/{id}")
     public Usuario updateUser(@PathVariable String id, @RequestBody UsuarioRequest request) {
         Usuario updatedUser = new Usuario();
@@ -60,6 +52,34 @@ public class AdminController {
     @DeleteMapping("/users/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable String id) {
         if (usuarioService.deleteUser(id)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PostMapping(value = "/skins/create", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Skin> createSkin(@RequestBody Skin skin) {
+        System.out.println(skin);
+        Skin newSkin = skinService.createSkin(skin);
+        System.out.println(newSkin);
+        return ResponseEntity.ok(newSkin);
+    }
+
+    @PutMapping("/skins/{id}")
+    public Skin updateSkin(@PathVariable String id, @RequestBody SkinRequest request) {
+        Skin updatedSkin = new Skin();
+        updatedSkin.setName(request.getNombre());
+        updatedSkin.setPrecio(request.getPrecio());
+        updatedSkin.setDescription(request.getDescription());
+        updatedSkin.setReels(request.getReels());
+        updatedSkin.setVendible(request.isVendible());
+        return skinService.updateSkin(id, updatedSkin);
+    }
+
+    @DeleteMapping("/skins/{id}")
+    public ResponseEntity<Void> deleteSkin(@PathVariable String id) {
+        if (skinService.deleteSkin(id)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -96,6 +116,59 @@ public class AdminController {
 
         public void setSkins(String[] skinsId) {
             this.skinsId = skinsId;
+        }
+    }
+
+    public static class SkinRequest {
+        @JsonProperty("nombre")
+        private String nombre;
+        @JsonProperty("precio")
+        private int precio;
+        @JsonProperty("description")
+        private String description;
+        @JsonProperty("reels")
+        private String[] reels;
+        @JsonProperty("vendible")
+        private boolean vendible;
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public void setNombre(String nombre) {
+            this.nombre = nombre;
+        }
+
+        public int getPrecio() {
+            return precio;
+        }
+
+        public void setPrecio(int precio) {
+            this.precio = precio;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public String[] getReels() {
+            return reels;
+        }
+
+        public void setReels(String[] reels) {
+            this.reels = reels;
+        }
+
+        public boolean isVendible() {
+            return vendible;
+        }
+
+        public void setVendible(boolean vendible) {
+            this.vendible = vendible;
         }
     }
 }

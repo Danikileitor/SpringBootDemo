@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>
                         <div class="skins">
                             <button data-id="${user.id}" class="edit-skins-button" title="Modificar Skins">✏️</button>
-                            <div class="user-skins" title="${user.skins.length}">${user.skins.map(skin => document.getElementById(skin).firstChild.textContent).join(', ')}</div>
+                            <div class="user-skins" title="${user.skins.length}">${user.skins.map(skin => document.getElementById(skin).firstChild.firstChild.value).join(', ')}</div>
                             <div data-id="${user.id}" class="skins-checkboxes-container" style="display: none;">
                                 <!-- Se llenará con las skins -->
                             </div>
@@ -344,11 +344,13 @@ document.addEventListener('DOMContentLoaded', () => {
             nombreInput.placeholder = 'Nombre';
             nombreInput.title = 'Nombre';
             nombreInput.id = 'skinFormularioNombre';
+            nombreInput.required = true;
             skinFormularioNombre.appendChild(nombreInput);
             skinFormularioFila.appendChild(skinFormularioNombre);
 
             const precioInput = document.createElement('input');
             precioInput.type = 'number';
+            precioInput.placeholder = 'Precio';
             precioInput.title = 'Precio';
             precioInput.id = 'skinFormularioPrecio';
             skinFormularioPrecio.appendChild(precioInput);
@@ -359,6 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
             descriptionInput.placeholder = 'Descripción';
             descriptionInput.title = 'Descripción';
             descriptionInput.id = 'skinFormularioDescription';
+            descriptionInput.required = true;
             skinFormularioDescription.appendChild(descriptionInput);
             skinFormularioFila.appendChild(skinFormularioDescription);
 
@@ -367,6 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
             reelsInput.placeholder = '😀,😅,😆,😊,😎';
             reelsInput.title = 'Emojis';
             reelsInput.id = 'skinFormularioReels';
+            reelsInput.required = true;
             skinFormularioReels.appendChild(reelsInput);
             skinFormularioFila.appendChild(skinFormularioReels);
 
@@ -382,6 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const crearInput = document.createElement('input');
             crearInput.type = 'submit';
             crearInput.title = 'Crear skin';
+            crearInput.className = 'save-button';
             crearInput.id = 'skinFormularioCrear';
             skinFormularioCrear.appendChild(crearInput);
             skinFormularioFila.appendChild(skinFormularioCrear);
@@ -429,18 +434,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const cDescription = document.createElement('th');
             const cReels = document.createElement('th');
             const cVendible = document.createElement('th');
+            const cAcciones = document.createElement('th');
 
             cNombre.textContent = "Nombre";
             cPrecio.textContent = "Precio";
             cDescription.textContent = "Descripción";
             cReels.textContent = "Emojis";
             cVendible.textContent = "🛒";
+            cAcciones.textContent = "Acciones";
 
             cabeceras.appendChild(cNombre);
             cabeceras.appendChild(cPrecio);
             cabeceras.appendChild(cDescription);
             cabeceras.appendChild(cReels);
             cabeceras.appendChild(cVendible);
+            cabeceras.appendChild(cAcciones);
             skinTable.appendChild(cabeceras);
 
             //Por cada skin añadimos una fila a la tabla
@@ -452,21 +460,118 @@ document.addEventListener('DOMContentLoaded', () => {
                 const description = document.createElement('td');
                 const reels = document.createElement('td');
                 const vendible = document.createElement('td');
+                const acciones = document.createElement('td');
 
-                nombre.textContent = skin.name;
-                precio.textContent = skin.precio;
-                description.textContent = skin.description;
-                reels.textContent = skin.reels;
-                vendible.textContent = skin.vendible ? '✅' : '❌';
+                const nombreInput = document.createElement('input');
+                nombreInput.type = 'text';
+                nombreInput.title = 'Nombre';
+                nombreInput.value = skin.name;
+                nombreInput.name = 'nombre';
+                nombre.appendChild(nombreInput);
+
+                const precioInput = document.createElement('input');
+                precioInput.type = 'number';
+                precioInput.title = 'Precio';
+                precioInput.value = skin.precio;
+                precioInput.name = 'precio';
+                precio.appendChild(precioInput);
+
+                const descriptionInput = document.createElement('input');
+                descriptionInput.type = 'text';
+                descriptionInput.title = 'Descripción';
+                descriptionInput.value = skin.description;
+                descriptionInput.name = 'description';
+                description.appendChild(descriptionInput);
+
+                const reelsInput = document.createElement('input');
+                reelsInput.type = 'text';
+                reelsInput.title = 'Emojis';
+                reelsInput.value = skin.reels;
+                reelsInput.name = 'reels';
+                reels.appendChild(reelsInput);
+
+                const vendibleCheckbox = document.createElement('input');
+                vendibleCheckbox.type = 'checkbox';
+                vendibleCheckbox.title = 'Vendible'
+                vendibleCheckbox.checked = skin.vendible;
+                vendibleCheckbox.name = 'vendible';
+                vendible.appendChild(vendibleCheckbox);
+
+                const accionesDiv = document.createElement('div');
+                const accionesGuardar = document.createElement('button');
+                accionesGuardar.textContent = "Guardar";
+                accionesGuardar.title = "Guardar";
+                accionesGuardar.className = "save-button";
+                const accionesEliminar = document.createElement('button');
+                accionesEliminar.textContent = "Eliminar";
+                accionesEliminar.title = "Eliminar";
+                accionesEliminar.className = "delete-button";
+                accionesDiv.className = "acciones";
+                accionesDiv.appendChild(accionesGuardar);
+                accionesDiv.appendChild(accionesEliminar);
+                acciones.appendChild(accionesDiv);
+
                 fila.id = skin.id;
-
                 fila.appendChild(nombre);
                 fila.appendChild(precio);
                 fila.appendChild(description);
                 fila.appendChild(reels);
                 fila.appendChild(vendible);
+                fila.appendChild(acciones);
                 skinTable.appendChild(fila);
             });
+
+            skinTable.addEventListener('click', async (e) => {
+                if (e.target && e.target.classList.contains('save-button')) {
+                    const row = e.target.closest('tr');
+                    const id = row.id;
+                    const nombre = row.querySelector('input[name="nombre"]').value;
+                    const precio = parseInt(row.querySelector('input[name="precio"]').value);
+                    const description = row.querySelector('input[name="description"]').value;
+                    const reels = row.querySelector('input[name="reels"]').value.split(",");
+                    const vendible = row.querySelector('input[name="vendible"]').checked;
+
+                    const response = await fetch(`/admin/api/skins/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                        },
+                        body: JSON.stringify({ nombre: nombre, precio: precio, description: description, reels: reels, vendible: vendible })
+                    });
+
+                    if (response.ok) {
+                        alert('Skin actualizada');
+                        location.reload();
+                    } else {
+                        alert('Error al actualizar la skin');
+                    }
+                }
+
+                if (e.target && e.target.classList.contains('delete-button')) {
+                    const id = e.target.closest('tr').id;
+                    const nombre = e.target.closest('tr').querySelector('input[name="nombre"]').value;
+                    const confirmDelete = confirm(`¿Estás seguro de que deseas eliminar la skin ${nombre}?`);
+
+                    if (confirmDelete) {
+                        const response = await fetch(`/admin/api/skins/${id}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                            }
+                        });
+
+                        if (response.ok) {
+                            alert('Skin ' + nombre + ' eliminada con éxito');
+                            location.reload();
+                        } else {
+                            alert('Error al eliminar la skin ' + nombre);
+                        }
+                    }
+                }
+            });
+
             skinsSection.appendChild(skinTable);
         }
 
