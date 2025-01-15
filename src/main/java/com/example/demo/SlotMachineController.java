@@ -171,14 +171,14 @@ public class SlotMachineController {
             Optional<Usuario> usuarioOpt = usuarioService.findByUsername(username);
             if (usuarioOpt.isPresent()) {
                 Usuario usuario = usuarioOpt.get();
-                if (usuario.getCoins() >= 1) {
+                int cost = request.getCost();
+                if (usuario.getCoins() >= cost) {
                     Optional<Skin> skinOpt = skinRepository.findByName(request.getSkin());
                     if (skinOpt.isPresent()) {
                         Skin skin = skinOpt.get();
                         String reel1 = getRandomReel(skin);
                         String reel2 = getRandomReel(skin);
                         String reel3 = getRandomReel(skin);
-                        int cost = request.getCost();
                         boolean win = reel1.equals(reel2) && reel2.equals(reel3);
                         String message = win ? "¡Ganaste!" : "¡Sigue intentando!";
                         int attemptNumber = dynamicSlotMachineService.getNextAttemptNumber(username);
@@ -195,7 +195,32 @@ public class SlotMachineController {
                         dynamicSlotMachineService.saveResult(username, result);
 
                         if (result.isWin()) {
-                            newCoins += 50;
+                            switch (result.getReel1()) {
+                                case Object o when o == skin.getReels()[0] -> {
+                                    newCoins += (cost * 10);
+                                }
+
+                                case Object o when o == skin.getReels()[1] -> {
+                                    newCoins += (cost * 7);
+                                }
+
+                                case Object o when o == skin.getReels()[2] -> {
+                                    newCoins += (cost * 5);
+                                }
+
+                                case Object o when o == skin.getReels()[3] -> {
+                                    newCoins += (cost * 3);
+                                }
+
+                                case Object o when o == skin.getReels()[4] -> {
+                                    newCoins += (cost * 2);
+                                }
+
+                                default -> {
+                                    // En caso de crear una skin con más de 5 emojis
+                                    newCoins += cost;
+                                }
+                            }
                             usuario.setCoins(newCoins);
                             usuarioService.victoria(usuario.getId());
                             usuarioService.updateUser(usuario.getId(), usuario);
