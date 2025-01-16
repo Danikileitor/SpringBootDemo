@@ -225,7 +225,7 @@ select option {
   left: 20px;
   width: 28%;
   background-color: #333;
-  padding: 10px;
+  padding: 10px 10px 20px 10px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   color: #fff;
@@ -258,6 +258,10 @@ select option {
   padding-left: 2em;
 }
 
+#premios-panel table td~td {
+  padding-top: 0.1em;
+}
+
 #premios-panel table td:first-child {
   text-align: center;
 }
@@ -279,7 +283,7 @@ select option {
   right: 20px;
   width: 28%;
   background-color: #333;
-  padding: 10px;
+  padding: 10px 10px 20px 10px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   color: #fff;
