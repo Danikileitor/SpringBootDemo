@@ -11,15 +11,23 @@
 	</parent>
 	<groupId>com.example</groupId>
 	<artifactId>demo</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
-	<description>Demo project for Spring Boot</description>
-	<url />
+	<version>1.0.0</version>
+	<name>Tragaperras</name>
+	<description>Tragaperras en Spring Boot</description>
+	<url>https://github.com/Danikileitor/SpringBootDemo</url>
 	<licenses>
-		<license />
+		<license>
+			<name>GNU General Public License, version 3</name>
+			<url>https://www.gnu.org/licenses/gpl-3.0.en.html</url>
+			<distribution>repo</distribution>
+		</license>
 	</licenses>
 	<developers>
-		<developer />
+		<developer>
+			<name>Danikileitor</name>
+			<email>danikileitor@gmail.com</email>
+			<url>https://github.com/Danikileitor/</url>
+		</developer>
 	</developers>
 	<scm>
 		<connection />
