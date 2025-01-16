@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -117,6 +118,11 @@ public class SlotMachineController {
         return ResponseEntity.ok(skinRepository.findAll());
     }
 
+    @PostMapping(value = "/skins/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getSkin(@PathVariable String id) {
+        return ResponseEntity.ok(skinRepository.findById(id));
+    }
+
     @PostMapping(value = "/skins/vendibles", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> obtenerSkinsVendibles(@RequestBody boolean vendible) {
         return ResponseEntity.ok(skinRepository.findAllByVendible(vendible));
@@ -197,28 +203,28 @@ public class SlotMachineController {
                         if (result.isWin()) {
                             switch (result.getReel1()) {
                                 case String o when o.equals(skin.getReels()[0]) -> {
-                                    newCoins += (cost * 10);
+                                    newCoins += (cost * 50);
                                 }
 
                                 case String o when o.equals(skin.getReels()[1]) -> {
-                                    newCoins += (cost * 7);
+                                    newCoins += (cost * 30);
                                 }
 
                                 case String o when o.equals(skin.getReels()[2]) -> {
-                                    newCoins += (cost * 5);
+                                    newCoins += (cost * 20);
                                 }
 
                                 case String o when o.equals(skin.getReels()[3]) -> {
-                                    newCoins += (cost * 3);
+                                    newCoins += (cost * 10);
                                 }
 
                                 case String o when o.equals(skin.getReels()[4]) -> {
-                                    newCoins += (cost * 2);
+                                    newCoins += (cost * 5);
                                 }
 
                                 default -> {
                                     // En caso de crear una skin con más de 5 emojis
-                                    newCoins += cost;
+                                    newCoins += (cost * 3);
                                 }
                             }
                             usuario.setCoins(newCoins);

@@ -96,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     skinSelect.addEventListener('change', () => {
         skinSelect.title = skinSelect.options[skinSelect.selectedIndex].title;
         localStorage.setItem("lastSkin", skinSelect.options[skinSelect.selectedIndex].value);
+        loadPremios(skinSelect.selectedOptions[0].id);
     });
 
     // Alternar entre login y registro
@@ -152,6 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 data.reverse().forEach(skin => {
                     const option = document.createElement('option');
                     option.value = skin.name;
+                    option.id = skin.id;
                     option.textContent = skin.name;
                     option.title = skin.description;
                     option.selected = skin.name == localStorage.getItem("lastSkin") ? true : false;
@@ -160,6 +162,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Actualizamos el title del select
                 skinSelect.title = skinSelect.options[skinSelect.selectedIndex].title;
+
+                // Carga inicial del panel de premios
+                loadPremios(skinSelect.selectedOptions[0].id);
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -196,49 +201,78 @@ function loadCoins() {
         .catch(error => console.error('Error:', error));
 };
 
-document.getElementById('play-button').addEventListener('click', function () {
-    if (!this.classList.contains('disabled')) {
-        this.classList.add('disabled');
-        var data = { "skin": document.getElementById('skin').value, "cost": 1 };
-        fetch('/play', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            },
-            body: JSON.stringify(data)
+// Función que maneja el juego
+function playGame(cost) {
+    // Obtén los botones
+    const buttons = document.querySelectorAll('.play-button');
+
+    // Añade la clase disabled a todos los botones
+    buttons.forEach(button => button.classList.add('disabled'));
+
+    // Envía la solicitud al servidor
+    var data = { "skin": document.getElementById('skin').value, "cost": cost };
+    fetch('/play', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => { return response.ok ? response.json() : Promise.reject(response) })
+        .then(data => {
+            let resultado = data[0];
+            let skin = data[1];
+            const reels = document.querySelectorAll('.reel span');
+            pagarCoins(cost);
+
+            reels.forEach(reel => {
+                let currentCharacter = Math.floor(Math.random() * skin.length);;
+                const animation = setInterval(() => {
+                    reel.textContent = skin[currentCharacter];
+                    currentCharacter = (currentCharacter + 1) % skin.length;
+                }, 100); // Cambia el emoji cada 100ms
+
+                // Detiene la animación después de 2 segundos
+                setTimeout(() => {
+                    clearInterval(animation);
+                    // Muestra el resultado final
+                    document.getElementById('reel1').textContent = resultado.reel1;
+                    document.getElementById('reel2').textContent = resultado.reel2;
+                    document.getElementById('reel3').textContent = resultado.reel3;
+                    document.getElementById('message').textContent = resultado.message;
+                    if (resultado.message == "¡Ganaste!") {
+                        loadCoins();
+                    }
+                    loadRanking();
+                    // Quita la clase disabled a todos los botones
+                    buttons.forEach(button => button.classList.remove('disabled'));
+                }, 2000);
+            });
         })
-            .then(response => { return response.ok ? response.json() : Promise.reject(response) })
-            .then(data => {
-                let resultado = data[0];
-                let skin = data[1];
-                const reels = document.querySelectorAll('.reel span');
-                pagarCoins(1);
+        .catch(error => error.text().then(message => {
+            console.error(message);
+            // Quita la clase disabled a todos los botones
+            buttons.forEach(button => button.classList.remove('disabled'));
+        }));
+}
 
-                reels.forEach(reel => {
-                    let currentCharacter = Math.floor(Math.random() * skin.length);;
-                    const animation = setInterval(() => {
-                        reel.textContent = skin[currentCharacter];
-                        currentCharacter = (currentCharacter + 1) % skin.length;
-                    }, 100); // Cambia el texto cada 100ms
+// Agrega eventos de clic a los botones
+document.getElementById('play-button-1').addEventListener('click', function () {
+    if (!this.classList.contains('disabled')) {
+        playGame(1);
+    }
+});
 
-                    // Detiene la animación después de 2 segundos
-                    setTimeout(() => {
-                        clearInterval(animation);
-                        // Muestra el resultado final
-                        document.getElementById('reel1').textContent = resultado.reel1;
-                        document.getElementById('reel2').textContent = resultado.reel2;
-                        document.getElementById('reel3').textContent = resultado.reel3;
-                        document.getElementById('message').textContent = resultado.message;
-                        if (resultado.message == "¡Ganaste!") {
-                            loadCoins();
-                        }
-                        loadRanking();
-                        this.classList.remove('disabled');
-                    }, 2000);
-                });
-            })
-            .catch(error => error.text().then(message => { console.error(message); this.classList.remove('disabled'); }));
+document.getElementById('play-button-2').addEventListener('click', function () {
+    if (!this.classList.contains('disabled')) {
+        playGame(5);
+    }
+});
+
+document.getElementById('play-button-3').addEventListener('click', function () {
+    if (!this.classList.contains('disabled')) {
+        playGame(10);
     }
 });
 
@@ -281,9 +315,9 @@ function loadRanking() {
 
             rankingTitle.textContent = "RANKING";
             colNombre.span = "1";
-            colNombre.style = "width: 75%;";
+            colNombre.style = "width: 75%";
             colVictorias.span = "1";
-            colVictorias.style = "width: 25%;";
+            colVictorias.style = "width: 25%";
 
             rankingTableGroup.appendChild(colNombre);
             rankingTableGroup.appendChild(colVictorias);
@@ -308,6 +342,78 @@ function loadRanking() {
         })
         .catch(error => console.error('Error:', error));
 };
+
+function loadPremios(skinId) {
+    fetch(`/skins/${skinId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            const premiosPanel = document.getElementById('premios-panel');
+            const premiosTitle = document.createElement('h3');
+            const hr = document.createElement('hr');
+            const premiosTable = document.createElement('table');
+            const premiosTableGroup = document.createElement('colgroup');
+            const colCombinacioes = document.createElement('col');
+            const colPremios = document.createElement('col');
+
+            premiosTitle.textContent = "PREMIOS";
+            colCombinacioes.span = "1";
+            colCombinacioes.style = "width: 70%";
+            colPremios.span = "1";
+            colPremios.style = "width: 30%";
+
+            premiosTableGroup.appendChild(colCombinacioes);
+            premiosTableGroup.appendChild(colPremios);
+            premiosTable.appendChild(premiosTableGroup);
+
+            data.reels.forEach((emoji, i) => {
+                const fila = document.createElement('tr');
+                const combinaciones = document.createElement('td');
+                const premios = document.createElement('td');
+                let premio;
+                switch (i) {
+                    case 0:
+                        premio = "x50";
+                        break;
+
+                    case 1:
+                        premio = "x30";
+                        break;
+
+                    case 2:
+                        premio = "x20";
+                        break;
+
+                    case 3:
+                        premio = "x10";
+                        break;
+
+                    case 4:
+                        premio = "x5";
+                        break;
+
+                    default:
+                        premio = "x3";
+                        break;
+                }
+
+                combinaciones.textContent = `${emoji} - ${emoji} - ${emoji}`;
+                combinaciones.title = combinaciones.textContent;
+                premios.textContent = `${premio}\t🪙`;
+                premios.title = `${premio} 🪙`;
+
+                fila.appendChild(combinaciones);
+                fila.appendChild(premios);
+                premiosTable.appendChild(fila);
+            });
+            premiosPanel.replaceChildren(premiosTitle, hr, premiosTable);
+        })
+        .catch(error => console.error('Error:', error));
+}
 
 function checkAuth() {
     try {

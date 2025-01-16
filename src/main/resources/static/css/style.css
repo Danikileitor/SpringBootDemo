@@ -27,7 +27,7 @@ h1 {
 }
 
 .slot-machine {
-  width: 300px;
+  width: 30%;
   margin: 40px auto;
   text-align: center;
   background-color: #333;
@@ -68,6 +68,26 @@ button {
   border: none;
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.slot-machine .buttons {
+  gap: 1em;
+}
+
+.slot-machine .buttons button {
+  width: 33%;
+}
+
+.slot-machine .buttons.extra-buttons *:first-child {
+  width: 50%;
+}
+
+.slot-machine .buttons.extra-buttons * {
+  width: 30%;
+}
+
+.slot-machine .extra-buttons *:last-child {
+  width: 20%;
 }
 
 #tienda {
@@ -203,7 +223,7 @@ select option {
   position: absolute;
   top: 20px;
   left: 20px;
-  width: 30%;
+  width: 28%;
   background-color: #333;
   padding: 10px;
   border-radius: 10px;
@@ -213,20 +233,23 @@ select option {
   font-weight: bold;
 }
 
-#ranking-panel h3 {
+#ranking-panel h3,
+#premios-panel h3 {
   text-align: center;
   letter-spacing: 2px;
 }
 
-#ranking-panel hr {
+#ranking-panel hr,
+#premios-panel hr {
   transform: translateY(-10.5px);
   width: 90%;
 }
 
-#ranking-panel table {
+#ranking-panel table,
+#premios-panel table {
   margin: 0 auto;
   border-collapse: collapse;
-  width: 100%;
+  width: 90%;
   table-layout: fixed;
 }
 
@@ -235,10 +258,33 @@ select option {
   padding-left: 2em;
 }
 
-#ranking-panel table td:first-child {
+#premios-panel table td:first-child {
+  text-align: center;
+}
+
+#premios-panel table td:last-child {
+  white-space-collapse: preserve;
+}
+
+#ranking-panel table td:first-child,
+#premios-panel table td:first-child {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+#premios-panel {
+  position: absolute;
+  top: 15%;
+  right: 20px;
+  width: 28%;
+  background-color: #333;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 @media screen and (orientation: portrait) {
@@ -247,7 +293,8 @@ select option {
   }
 
   .slot-machine,
-  #ranking-panel {
+  #ranking-panel,
+  #premios-panel {
     width: 80%;
     margin: 20px auto;
   }
@@ -264,7 +311,6 @@ select option {
 
   .buttons,
   #showRestablecer {
-    gap: 1em;
     padding: auto;
   }
 
@@ -273,21 +319,14 @@ select option {
     font-size: 300%;
   }
 
-  .slot-machine .buttons button:first-child {
-    width: 70%;
-  }
-
-  .slot-machine .buttons button:last-child {
-    width: 30%;
-  }
-
   #skin {
     width: 100%;
     height: 5vh;
     font-size: 300%;
   }
 
-  #ranking-panel {
+  #ranking-panel,
+  #premios-panel {
     position: relative;
     top: auto;
     left: auto;
@@ -296,13 +335,16 @@ select option {
   }
 
   #ranking-panel h3,
+  #premios-panel h3,
   #ranking-panel table td,
+  #premios-panel table td,
   #message,
   #restablecerMessage {
     font-size: 300%;
   }
 
-  #ranking-panel table {
+  #ranking-panel table,
+  #premios-panel table {
     width: 100%;
   }
 
@@ -315,11 +357,13 @@ select option {
     font-size: 24px;
   }
 
-  #ranking-panel table td:first-child {
+  #ranking-panel table td:first-child,
+  #premios-panel table td:first-child {
     padding-left: 10%;
   }
 
-  #ranking-panel table td~td {
+  #ranking-panel table td~td,
+  #premios-panel table td~td {
     padding-left: 0;
   }
 
@@ -333,7 +377,8 @@ select option {
     margin-top: 20px;
   }
 
-  #ranking-panel hr {
+  #ranking-panel hr,
+  #premios-panel hr {
     transform: translateY(-27px);
     width: 90%;
   }
