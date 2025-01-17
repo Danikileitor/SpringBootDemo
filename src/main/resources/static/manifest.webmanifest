@@ -28,11 +28,18 @@
     "prefer_related_applications": false,
     "screenshots": [
         {
-            "src": "screenshots/home.jpeg",
+            "src": "screenshots/desktop-home.webp",
             "sizes": "1722x915",
-            "type": "image/jpeg",
+            "type": "image/webp",
             "form_factor": "wide",
-            "label": "Pantalla de juego principal"
+            "label": "Pantalla de juego principal vista desde un PC"
+        },
+        {
+            "src": "screenshots/mobile-home.webp",
+            "sizes": "1080x1920",
+            "type": "image/webp",
+            "form_factor": "narrow",
+            "label": "Pantalla de juego principal vista desde un móvil"
         }
     ]
 }
