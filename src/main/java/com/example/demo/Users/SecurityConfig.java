@@ -35,7 +35,9 @@ public class SecurityConfig {
                         .hasAuthority("ROLE_ADMIN")
                         .anyRequest().permitAll())
                 // Deshabilita el login basado en formulario por defecto
-                .formLogin(login -> login.disable());
+                .formLogin(login -> login.disable())
+                // Deshabilita X-Frame-Options para que se pueda insertar en iframes
+                .headers(headers -> headers.frameOptions(options -> options.disable()));
 
         // Añadir el filtro JWT
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
