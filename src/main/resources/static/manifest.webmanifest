@@ -1,0 +1,38 @@
+{
+    "lang": "es-ES",
+    "short_name": "Tragaperras",
+    "name": "[DNK]{CASINO}[Tragaperras]",
+    "description": "La Tragaperras del Casino",
+    "start_url": "/",
+    "display": "fullscreen",
+    "icons": [
+        {
+            "src": "images/logo16.png",
+            "sizes": "16x16",
+            "type": "image/png"
+        },
+        {
+            "src": "images/logo192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "images/logo512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#4caf50",
+    "background_color": "#333",
+    "orientation": "any",
+    "prefer_related_applications": false,
+    "screenshots": [
+        {
+            "src": "screenshots/home.jpeg",
+            "sizes": "1722x915",
+            "type": "image/jpeg",
+            "form_factor": "wide",
+            "label": "Pantalla de juego principal"
+        }
+    ]
+}
